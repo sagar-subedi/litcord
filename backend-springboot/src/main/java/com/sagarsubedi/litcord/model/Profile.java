@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-    private Long userId;
+    private Long id;
 
     private String name;
 
@@ -22,8 +22,8 @@ public class Profile {
 
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
     public String getName(){
