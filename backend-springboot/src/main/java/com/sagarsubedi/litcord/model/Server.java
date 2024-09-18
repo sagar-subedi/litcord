@@ -7,7 +7,7 @@ public class Server {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "server_seq")
-    private String id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -16,16 +16,19 @@ public class Server {
     private String inviteCode;
 
     @Column(name = "userId", nullable = false)
-    private String userId;
+    private Long userId;
 
-    public Server(String name, String inviteCode, String userId) {
+    public Server(String name, String inviteCode, Long userId) {
         this.name = name;
         this.inviteCode = inviteCode;
         this.userId = userId;
     }
 
+    public Server(){
+
+    }
     // Getters and Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -37,7 +40,7 @@ public class Server {
         return inviteCode;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 }

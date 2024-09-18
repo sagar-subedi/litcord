@@ -18,6 +18,10 @@ public class Profile {
         this.email = email;
     }
 
+    public Profile(){
+
+    }
+
     public Long getUserId() {
         return userId;
     }

@@ -20,6 +20,10 @@ public class Member {
         this.userId = userId;
     }
 
+    public Member(){
+
+    }
+
     public Long getChannelId(){
         return channelId;
     }
