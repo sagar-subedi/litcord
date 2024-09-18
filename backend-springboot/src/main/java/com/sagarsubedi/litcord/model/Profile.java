@@ -3,7 +3,7 @@ package com.sagarsubedi.litcord.model;
 import jakarta.persistence.*;
 
 @Entity
-public class User {
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     private Long userId;
@@ -12,7 +12,8 @@ public class User {
 
     @Column(unique = true)
     private String email;
-    public User(String name,String email){
+
+    public Profile(String name,String email){
         this.name = name;
         this.email = email;
     }
