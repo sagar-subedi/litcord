@@ -17,10 +17,17 @@ public class Profile {
 
     @Column(unique = true)
     private String email;
+    private String password;
 
     public Profile(String name,String email){
         this.name = name;
         this.email = email;
+    }
+
+    public Profile(String name,String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public Profile(){
@@ -37,5 +44,8 @@ public class Profile {
 
     public String getEmail(){
         return  email;
+    }
+    public String getPassword() {
+        return password;
     }
 }
