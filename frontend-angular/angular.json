@@ -70,7 +70,14 @@
               "buildTarget": "litcord:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "ssl": true,
+            "sslKey": "/home/sagarsubedi/key.pem",
+            "sslCert": "/home/sagarsubedi/cert.pem",
+            "host": "0.0.0.0",
+            "port": 4200
+            }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
