@@ -31,4 +31,16 @@ public class SignalingController {
         System.out.println("this is a test: " + message); //.getUser() + " " + message.getMessage());
         return message; //.getMessage();  // Send ICE candidates
     }
+
+    @MessageMapping("/members/req")
+    @SendTo("/topic/members/req")
+    public String sendMembersReq(String message) {
+        return message; //.getMessage();  // Send ICE candidates
+    }
+
+    @MessageMapping("/members/res")
+    @SendTo("/topic/members/res")
+    public String sendMembersRes(String message) {
+        return message; //.getMessage();  // Send ICE candidates
+    }
 }
