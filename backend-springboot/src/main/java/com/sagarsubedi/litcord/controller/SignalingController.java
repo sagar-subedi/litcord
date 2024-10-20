@@ -9,7 +9,6 @@ public class SignalingController {
     @MessageMapping("/offer")
     @SendTo("/topic/offer")
     public String sendOffer(String offer) {
-        System.out.println("Offer " + offer);
         return offer;  // Send SDP offer to the other peer
     }
 
@@ -28,19 +27,18 @@ public class SignalingController {
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
     public String sendTest(String message) {
-        System.out.println("this is a test: " + message); //.getUser() + " " + message.getMessage());
         return message; //.getMessage();  // Send ICE candidates
     }
 
     @MessageMapping("/members/req")
     @SendTo("/topic/members/req")
     public String sendMembersReq(String message) {
-        return message; //.getMessage();  // Send ICE candidates
+        return message; //  // Send ICE candidates
     }
 
     @MessageMapping("/members/res")
     @SendTo("/topic/members/res")
     public String sendMembersRes(String message) {
-        return message; //.getMessage();  // Send ICE candidates
+        return message;  // Send ICE candidates
     }
 }
