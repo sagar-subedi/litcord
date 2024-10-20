@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
+
+    //Maybe use constructor injection instead of filed
+    //As of this implementation, UserDetailsServiceImpl needs to be passed profileRepository for instantiation
+    //Is @Autowired and constructor injection both necessary
     @Autowired
     private final ProfileRepository profileRepository;
 

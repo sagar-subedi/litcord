@@ -16,17 +16,8 @@ public class TestController {
     @Autowired
      private MessageRepository messageRepository;
 
-    @GetMapping("/")
+    @GetMapping("/test")
     public   ResponseEntity<String> testRoute(){
-        Message message = new Message();
-
-        messageRepository.save(message);
-        try {
-
-        }catch (Exception e){
-            return new ResponseEntity<>("Some freaking error occurred", HttpStatus.BAD_GATEWAY);
-        }
-        messageRepository.save(message);
         return new ResponseEntity<>("Everything is working fine", HttpStatus.OK);
     }
 }
