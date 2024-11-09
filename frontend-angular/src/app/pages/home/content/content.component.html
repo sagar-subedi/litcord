@@ -1,0 +1,13 @@
+<div id="content-col" class="flex flex-col justify-start min-w-[30rem] w-full h-full flex-grow bg-gray-500 p-5 pb-0">
+    <div>
+        <h2 class="font-bold text-xl">{{channel.id}}</h2>
+    </div>
+    <div class="flex-grow">
+        <app-video-call [channel]="channel"></app-video-call>
+    </div>
+    <div>
+        <mat-form-field  class="w-full">
+            <input matInput placeholder="Type your message"/>
+        </mat-form-field>
+    </div>
+</div>
