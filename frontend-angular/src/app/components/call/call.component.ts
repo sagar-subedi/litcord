@@ -54,9 +54,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
     this.localVideo.nativeElement.muted = true;
-
-    this.signalingService.activateStomp();
-    //ensure conection is setup before any subscription
+    
+    //ensure conection is setup before any subscription, doing so by delaying subscription
     setTimeout(() => {
       this.signalingService.subscribe('offer', (offer: any) =>
         this.handleOffer(offer)

@@ -20,9 +20,6 @@ export class SignalingService {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-  }
-
-  activateStomp() {
     this.stompClient.activate();
   }
 
