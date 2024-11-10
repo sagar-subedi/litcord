@@ -1,7 +1,7 @@
 <div class="grid gap-4 p-4">
   <div class="h-full item flex flex-col items-center">
-    <video #localVideo autoplay muted></video>
-    <p class="mt-2 text-sm font-medium text-gray-800">Me</p>
+    <video #localVideo autoplay muted class="rounded-md border-blue-600 border-2 shadow-lg"></video>
+    <p class="mt-2 text-sm text-gray-100">Me</p>
   </div>
   <div
     *ngFor="let userId of userIds"
@@ -13,6 +13,6 @@
       playsinline
       class="w-full border-2 border-gray-300 rounded-md shadow-lg"
     ></video>
-    <p class="mt-2 text-sm font-medium text-gray-800">{{ userId }}</p>
+    <p class="mt-2 text-sm text-gray-100">{{ userId }}</p>
   </div>
 </div>

@@ -50,9 +50,10 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     //get video/audio stream and sets the stream to be redered in 'localVideo' element
     this.localStream = await navigator.mediaDevices.getUserMedia({
       video: true,
-      audio: false,
+      audio: true,
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
+    this.localVideo.nativeElement.muted = true;
 
     this.signalingService.activateStomp();
     //ensure conection is setup before any subscription
@@ -209,6 +210,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
         const videoElement = this.getVideoElement(receiverId);
         if (videoElement) {
           videoElement.srcObject = event.streams[0];
+          videoElement.muted = false;
         }
       }, 1000);
     };
