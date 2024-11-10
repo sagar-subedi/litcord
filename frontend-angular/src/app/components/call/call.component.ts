@@ -78,7 +78,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('Ng destory on call called');
+    console.log('Ng destory oncalled');
     // Clean up connections when component is destroyed
     // Iterate and close each peer connection
     Object.entries(this.peerConnectionMap).forEach(
@@ -92,13 +92,11 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
         delete this.peerConnectionMap[userId];
       }
     );
+    this.signalingService.clearAllSubscriptions();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // if(changes['channel'].currentValue){
-    //   this.peerConnectionMap.forEach((connection: any) => connection.close());
-    //   this.peerConnectionMap.clear();
-    // }
+    //this method is just in case if needed
   }
 
   sendMemberRequest() {
