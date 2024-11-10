@@ -1,6 +1,6 @@
 import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { MatFormField } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ChannelButtonComponent } from './channel-button/channel-button.component';
 import { CommonModule } from '@angular/common';
@@ -10,7 +10,7 @@ import { CreateChannelModalComponent } from '../create-channel-modal/create-chan
 @Component({
   selector: 'app-channel',
   standalone: true,
-  imports: [MatFormField, MatInputModule, MatIcon, ChannelButtonComponent, CommonModule, CreateChannelModalComponent],
+  imports: [MatFormField, MatInputModule, MatIconModule, ChannelButtonComponent, CommonModule, CreateChannelModalComponent],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss'
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { SignalingService } from '../../../services/signaling-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -11,7 +11,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './call.component.html',
   styleUrls: ['./call.component.scss']
 })
-export class CallComponent implements OnInit, OnChanges {
+export class CallComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('localVideo') localVideo!: ElementRef;
   @ViewChild('remoteVideo') remoteVideo!: ElementRef;
   @ViewChild('videoContainer', { static: true }) videoContainer!: ElementRef;
@@ -19,7 +19,7 @@ export class CallComponent implements OnInit, OnChanges {
   private localStream!: MediaStream;
   messages : string[] = [];
   userId: string = crypto.randomUUID();
-  roomId!: string;
+  channelId!: string;
   @Input() channel:any;
 
   private peerConnectionMap: any = {};
@@ -27,7 +27,7 @@ export class CallComponent implements OnInit, OnChanges {
   constructor(private signalingService: SignalingService, private route: ActivatedRoute) { }
 
   async ngOnInit() {
-    this.roomId = this.route.snapshot.paramMap.get('channelid') ?? '';
+    this.channelId = this.route.snapshot.paramMap.get('channelid') ?? '';
 
     //get video/audio stream and sets the stream to be redered in 'localVideo' element
     this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -45,37 +45,43 @@ export class CallComponent implements OnInit, OnChanges {
     }, 1000);
   }
 
+  ngOnDestroy() {
+    // Clean up connections when component is destroyed
+    this.peerConnectionMap.forEach((connection:any) => connection.close());
+    this.peerConnectionMap.clear();
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
       console.log(changes);
   }
 
   sendMemberRequest(){
-    this.signalingService.publishMemberRequest(JSON.stringify({requester: this.userId, roomId: this.roomId}))
+    this.signalingService.publishMemberRequest(JSON.stringify({requester: this.userId, channelId: this.channelId}))
   }
 
   async handleMemberRequests(req: any) {
     const reqObj = JSON.parse(req);
-    if(reqObj.roomId==this.roomId && reqObj.requester!=this.userId){
+    if(reqObj.channelId==this.channelId && reqObj.requester!=this.userId){
       this.signalingService.publishMemberResponse(JSON.stringify({to:reqObj.requester, roomId: reqObj.roomId, idRequested:this.userId}))
     }
   }
 
   async handleMemberResponse(res: any) {
     const resObj = JSON.parse(res);
-    if(resObj.to==this.userId && this.roomId==this.roomId){
+    if(resObj.to==this.userId && this.channelId==resObj.channelId){
       const newPeerConnection = this.createRTCPeerConnection(resObj.idRequested);
       this.peerConnectionMap[resObj.idRequested] = newPeerConnection;
 
       //create and send offer
       const offer = await newPeerConnection.createOffer();
       await newPeerConnection.setLocalDescription(offer);
-      this.signalingService.sendOffer(JSON.stringify({offer: offer, to:resObj.idRequested, userId:this.userId, roomId:this.roomId}));
+      this.signalingService.sendOffer(JSON.stringify({offer: offer, to:resObj.idRequested, userId:this.userId, channelId:this.channelId}));
     }
   }
 
   onicecandidateFunction = (event : any) => {
     if (event.candidate) {
-      this.signalingService.sendCandidate(JSON.stringify({candidate: event.candidate, userId: this.userId, roomId: this.roomId}));
+      this.signalingService.sendCandidate(JSON.stringify({candidate: event.candidate, userId: this.userId, channelId: this.channelId}));
     }
   };
 
@@ -104,7 +110,7 @@ export class CallComponent implements OnInit, OnChanges {
 
     peerConnection.onicecandidate = (event : any) => {
       if (event.candidate) {
-        this.signalingService.sendCandidate(JSON.stringify({candidate: event.candidate, to:receiverId, userId: this.userId, roomId: this.roomId}));
+        this.signalingService.sendCandidate(JSON.stringify({candidate: event.candidate, to:receiverId, userId: this.userId, channelId: this.channelId}));
       }
     };
 
@@ -116,7 +122,7 @@ export class CallComponent implements OnInit, OnChanges {
     //alternative way is to somehow not have this message be broadcasted to the client that sent it.
     const messageObj = JSON.parse(message);
     const offer = messageObj.offer;
-    if(this.userId==messageObj.to && messageObj.roomId==this.roomId){
+    if(this.userId==messageObj.to && messageObj.channelId==this.channelId){
       const newRtCPeerConnection = this.createRTCPeerConnection(messageObj.userId);
       await newRtCPeerConnection.setRemoteDescription(new RTCSessionDescription(offer));
       const answer = await newRtCPeerConnection.createAnswer();
@@ -124,7 +130,7 @@ export class CallComponent implements OnInit, OnChanges {
       this.peerConnectionMap[messageObj.userId] = newRtCPeerConnection;
 
       //add new RTCPeerConnection to the RTC map
-      this.signalingService.sendAnswer(JSON.stringify({answer:answer, answerBy: this.userId, roomId:this.roomId, userId:messageObj.userId}));
+      this.signalingService.sendAnswer(JSON.stringify({answer:answer, answerBy: this.userId, channelId:this.channelId, userId:messageObj.userId}));
     }
     
   }
@@ -132,7 +138,7 @@ export class CallComponent implements OnInit, OnChanges {
   async handleAnswer(message: any) {
     const answerObj = JSON.parse(message);
     const answer = answerObj.answer;
-    if(answerObj.userId==this.userId && answerObj.roomId==this.roomId){
+    if(answerObj.userId==this.userId && answerObj.channelId==this.channelId){
       //create new RTCPeerConnection here and add it to the map
       await this.peerConnectionMap[answerObj.answerBy].setRemoteDescription(new RTCSessionDescription(answer));
     }
@@ -143,7 +149,7 @@ export class CallComponent implements OnInit, OnChanges {
   handleCandidate(message: any) {
     const messageObj = JSON.parse(message);
     const candidate = messageObj.candidate;
-    if(messageObj.to == this.userId && messageObj.roomId == this.roomId){
+    if(messageObj.to == this.userId && messageObj.channelId == this.channelId){
       this.peerConnectionMap[messageObj.userId].addIceCandidate(new RTCIceCandidate(candidate));
     }
   }
