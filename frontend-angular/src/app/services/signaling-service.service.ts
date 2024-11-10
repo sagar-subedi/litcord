@@ -28,84 +28,43 @@ export class SignalingService {
 
   // Subscribe to a topic and store the subscription
   subscribe(topic: string, callback: (message: any) => void): void {
-    const subscription = this.stompClient.subscribe(topic, (message) => {
-      callback(message.body);
-    });
+    const subscription = this.stompClient.subscribe(
+      '/topic/' + topic,
+      (message) => {
+        callback(message.body);
+      }
+    );
 
     // Store the subscription for future reference
     this.subscriptions.set(topic, subscription);
   }
 
-  subscribeOffer(callback: any) {
-    const subscription = this.stompClient.subscribe(
-      '/topic/offer',
-      (message) => {
-        callback(message.body);
-      }
-    );
+  // Unsubscribe from a specific topic
+  unsubscribe(topic: string): void {
+    const subscription = this.subscriptions.get(topic);
+    if (subscription) {
+      subscription.unsubscribe(); // Call the unsubscribe method
+      this.subscriptions.delete(topic); // Remove it from the map
+      console.log(`Unsubscribed from ${topic}`);
+    } else {
+      console.log(`No subscription found for topic: ${topic}`);
+    }
   }
 
-  subscribeAnswer(callback: any) {
-    this.stompClient.subscribe('/topic/answer', (message) => {
-      callback(message.body);
+  // Clear all subscriptions
+  clearAllSubscriptions(): void {
+    this.subscriptions.forEach((subscription, topic) => {
+      subscription.unsubscribe(); // Unsubscribe each
+      console.log(`Unsubscribed from ${topic}`);
     });
+    this.subscriptions.clear(); // Clear the map
+    console.log('All subscriptions cleared');
   }
 
-  subscribeCandidate(callback: any) {
-    this.stompClient.subscribe('/topic/candidate', (message) => {
-      callback(message.body);
-    });
-  }
-
-  subscribeChannelMemberRequests(callback: any) {
-    this.stompClient.subscribe('/topic/members/req', (message) => {
-      callback(message.body);
-    });
-  }
-
-  subscribeChannelMemberResponses(callback: any) {
-    this.stompClient.subscribe('/topic/members/res', (message) => {
-      callback(message.body);
-    });
-  }
-
-  subscribeMessage(callback: any) {
-    console.log('Subscribed to /topic/messages');
-    this.stompClient.subscribe('/topic/messages', (message) => {
-      callback(message);
-    });
-  }
-
-  publishOffer(offer: any) {
-    this.stompClient.publish({ destination: '/app/offer', body: offer });
-  }
-
-  publishAnswer(answer: any) {
-    this.stompClient.publish({ destination: '/app/answer', body: answer });
-  }
-
-  publishCandidate(candidate: any) {
+  publish(destination: string, body: string) {
     this.stompClient.publish({
-      destination: '/app/candidate',
-      body: candidate,
-    });
-  }
-
-  publishMessage(message: string) {
-    this.stompClient.publish({ destination: '/app/chat', body: message });
-  }
-
-  publishMemberRequest(message: string) {
-    this.stompClient.publish({
-      destination: '/app/members/req',
-      body: message,
-    });
-  }
-
-  publishMemberResponse(message: string) {
-    this.stompClient.publish({
-      destination: '/app/members/res',
-      body: message,
+      destination: '/app/' + destination,
+      body,
     });
   }
 }

@@ -36,7 +36,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   @Input() channel: any;
   userIds: string[] = []; // List of peer userIds to render
 
-  private peerConnectionMap: { [userId: string]: RTCPeerConnection }  = {};
+  private peerConnectionMap: { [userId: string]: RTCPeerConnection } = {};
 
   constructor(
     private signalingService: SignalingService,
@@ -58,19 +58,19 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     this.signalingService.activateStomp();
     //ensure conection is setup before any subscription
     setTimeout(() => {
-      this.signalingService.subscribeOffer((offer: any) =>
+      this.signalingService.subscribe('offer', (offer: any) =>
         this.handleOffer(offer)
       );
-      this.signalingService.subscribeAnswer((answer: any) =>
+      this.signalingService.subscribe('answer', (answer: any) =>
         this.handleAnswer(answer)
       );
-      this.signalingService.subscribeCandidate((candidate: any) =>
+      this.signalingService.subscribe('candidate', (candidate: any) =>
         this.handleCandidate(candidate)
       );
-      this.signalingService.subscribeChannelMemberRequests((req: any) =>
+      this.signalingService.subscribe('members/req', (req: any) =>
         this.handleMemberRequests(req)
       );
-      this.signalingService.subscribeChannelMemberResponses((res: any) =>
+      this.signalingService.subscribe('members/res', (res: any) =>
         this.handleMemberResponse(res)
       );
       this.sendMemberRequest();
@@ -82,7 +82,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     // Clean up connections when component is destroyed
     // Iterate and close each peer connection
     Object.entries(this.peerConnectionMap).forEach(
-      ([userId, peerConnection]:[string, RTCPeerConnection]) => {
+      ([userId, peerConnection]: [string, RTCPeerConnection]) => {
         console.log(`Closing connection for user: ${userId}`);
 
         // Close the peer connection
@@ -102,7 +102,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   sendMemberRequest() {
-    this.signalingService.publishMemberRequest(
+    this.signalingService.publish(
+      'members/req',
       JSON.stringify({ requester: this.userId, channelId: this.channelId })
     );
   }
@@ -110,7 +111,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   async handleMemberRequests(req: any) {
     const reqObj = JSON.parse(req);
     if (reqObj.channelId == this.channelId && reqObj.requester != this.userId) {
-      this.signalingService.publishMemberResponse(
+      this.signalingService.publish(
+        'members/res',
         JSON.stringify({
           to: reqObj.requester,
           roomId: reqObj.roomId,
@@ -132,7 +134,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
       //create and send offer
       const offer = await newPeerConnection.createOffer();
       await newPeerConnection.setLocalDescription(offer);
-      this.signalingService.publishOffer(
+      this.signalingService.publish(
+        'offer',
         JSON.stringify({
           offer: offer,
           to: resObj.idRequested,
@@ -145,7 +148,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
 
   onicecandidateFunction = (event: any) => {
     if (event.candidate) {
-      this.signalingService.publishCandidate(
+      this.signalingService.publish(
+        'candidate',
         JSON.stringify({
           candidate: event.candidate,
           userId: this.userId,
@@ -168,7 +172,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
 
     peerConnection.onicecandidate = (event: any) => {
       if (event.candidate) {
-        this.signalingService.publishCandidate(
+        this.signalingService.publish(
+          'candidate',
           JSON.stringify({
             candidate: event.candidate,
             to: receiverId,
@@ -260,7 +265,8 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
       this.userIds = Object.keys(this.peerConnectionMap); // Update userIds list
 
       //add new RTCPeerConnection to the RTC map
-      this.signalingService.publishAnswer(
+      this.signalingService.publish(
+        'answer',
         JSON.stringify({
           answer: answer,
           answerBy: this.userId,
