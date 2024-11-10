@@ -1,7 +1,18 @@
-<div>
+<div class="grid gap-4 p-4">
+  <div class="h-full item flex flex-col items-center">
     <video #localVideo autoplay muted></video>
-
-    <!-- Container for dynamically added video elements -->
-    <div #videoContainer class="video-container"></div>
+    <p class="mt-2 text-sm font-medium text-gray-800">Me</p>
   </div>
-  
+  <div
+    *ngFor="let userId of userIds"
+    class="item h-full flex flex-col items-center"
+  >
+    <video
+      #videoElement
+      autoplay
+      playsinline
+      class="w-full border-2 border-gray-300 rounded-md shadow-lg"
+    ></video>
+    <p class="mt-2 text-sm font-medium text-gray-800">{{ userId }}</p>
+  </div>
+</div>
