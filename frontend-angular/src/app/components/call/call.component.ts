@@ -11,7 +11,7 @@ import {
   QueryList,
   ChangeDetectorRef,
 } from '@angular/core';
-import { SignalingService } from '../../../services/signaling-service.service';
+import { SignalingService } from '../../services/signaling-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
