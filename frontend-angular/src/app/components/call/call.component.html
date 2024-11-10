@@ -16,3 +16,65 @@
     <p class="mt-2 text-sm text-gray-100">{{ userId }}</p>
   </div>
 </div>
+
+
+<!-- Control section of the call -->
+<div  class="flex justify-center">
+  <div class="fixed bottom-4 bg-gray-800 text-white p-4 rounded-lg shadow-lg flex gap-4 items-center">
+    <!-- End Call -->
+    <button
+      class="bg-red-600 hover:bg-red-700 p-3 rounded-full shadow-md focus:outline-none flex"
+      (click)="endCall()"
+    >
+      <mat-icon>call_end</mat-icon>
+    </button>
+  
+    <!-- Mute/Unmute -->
+    <button
+      class="bg-gray-600 hover:bg-gray-700 p-3 rounded-full shadow-md focus:outline-none flex"
+      (click)="toggleMute()"
+    >
+    <mat-icon>{{ isMuted ? "mic_off" : "mic" }}</mat-icon>
+    </button>
+  
+    <!-- Toggle Camera -->
+    <button
+      class="bg-gray-600 hover:bg-gray-700 p-3 rounded-full shadow-md focus:outline-none flex"
+      (click)="toggleCamera()"
+    >
+      <mat-icon>{{ isCameraOn ? "videocam" : "videocam_off" }}</mat-icon>
+    </button>
+  
+    <!-- Open Chat -->
+    <button
+      class="bg-gray-600 hover:bg-gray-700 p-3 rounded-full shadow-md focus:outline-none flex"
+      (click)="toggleChat()"
+    >
+      <mat-icon>forum</mat-icon>
+    </button>
+  </div>
+</div>
+
+
+<div
+  *ngIf="isChatOpen"
+  class="fixed top-0 right-0 h-full w-1/3 text-black bg-gray-400 shadow-lg p-4 flex flex-col"
+>
+  <h2 class="text-lg font-bold mb-4">Chat</h2>
+  <div class="flex-grow overflow-y-auto">
+    <!-- Chat Messages -->
+    <p *ngFor="let message of chatMessages">{{ message }}</p>
+  </div>
+  <div class="mt-4">
+    <input
+      type="text"
+      placeholder="Type a message..."
+      class="w-full p-2 border rounded-md"
+    />
+    <button class="bg-blue-600 text-white px-4 py-2 mt-2 rounded-md">
+      Send
+    </button>
+  </div>
+</div>
+
+

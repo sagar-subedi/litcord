@@ -15,11 +15,12 @@ import { SignalingService } from '../../services/signaling-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-video-call',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatIconModule],
   templateUrl: './call.component.html',
   styleUrls: ['./call.component.scss'],
 })
@@ -35,6 +36,12 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   channelId!: string;
   @Input() channel: any;
   userIds: string[] = []; // List of peer userIds to render
+
+
+  isMuted: boolean = false;
+  isCameraOn: boolean = true;
+  isChatOpen: boolean = false;
+
 
   private peerConnectionMap: { [userId: string]: RTCPeerConnection } = {};
 
@@ -312,4 +319,43 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     this.userIds = Object.keys(this.peerConnectionMap); // Update userIds list
     this.cdr.detectChanges();
   }
+
+  // End Call
+  endCall() {
+    console.log('Ending call...');
+    // Add your logic to terminate the WebRTC call
+  }
+
+  // Toggle Mute
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    console.log(this.isMuted ? 'Muted' : 'Unmuted');
+    // Add WebRTC mute/unmute logic
+  }
+
+  // Toggle Camera
+  toggleCamera() {
+    this.isCameraOn = !this.isCameraOn;
+    console.log(this.isCameraOn ? 'Camera On' : 'Camera Off');
+    // Add WebRTC toggle camera logic
+  }
+
+  // Open/Close Chat
+  toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+    console.log(this.isChatOpen ? 'Chat Opened' : 'Chat Closed');
+    // Add logic to display chat UI
+  }
+
+  chatMessages: string[] = [
+    'Hello, welcome to the call!',
+    'Let me know if you need anything.',
+  ];
+  
+  // Add new messages here
+  addMessage(newMessage: string) {
+    this.chatMessages.push(newMessage);
+  }
+  
+
 }
