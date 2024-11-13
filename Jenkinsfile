@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'git@github.com:sagar-subedi/litcord.git', branch: 'develop'
+                git url: 'https://github.com/sagar-subedi/litcord.git', branch: 'feature/6-setup-homepage'
             }
         }
 
