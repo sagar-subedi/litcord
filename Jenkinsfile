@@ -15,7 +15,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'npm install'
+                    sh 'cd ./frontend-angular && npm install'
                 }
             }
         }
