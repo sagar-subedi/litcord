@@ -23,7 +23,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    sh 'npm run build'
+                    sh 'cd ./frontend-angular && npm run build'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
         stage('Test') {
             steps {
                 script {
-                    sh 'npm test'
+                    sh 'cd ./frontend-angular && npm test'
                 }
             }
         }
