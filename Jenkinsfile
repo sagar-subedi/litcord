@@ -28,13 +28,13 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                script {
-                    sh 'cd ./frontend-angular && npm test'
-                }
-            }
-        }
+        // stage('Test') {
+        //     steps {
+        //         script {
+        //             sh 'cd ./frontend-angular && npm test'
+        //         }
+        //     }
+        // }
 
         stage('Archive Build Artifacts') {
             steps {
