@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class ServerService {
   // baseUrl: string = 'https://192.168.100.190:8081/test/';
-  baseUrl: string = 'https://65.0.71.191:8081/test/';
+  baseUrl: string = 'https://litcord-api.sagar88.com.np/test/';
 
   constructor(private http: HttpClient) { 
 
