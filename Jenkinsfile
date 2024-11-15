@@ -52,8 +52,8 @@ pipeline {
                 configName: 'Litcord EC2', // This is a predefined SSH configuration in Jenkins.
                 transfers: [
                     sshTransfer(
-                        sourceFiles: '**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
-                        // removePrefix: '', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
+                        sourceFiles: 'frontend-angular/dist/**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
+                        removePrefix: 'frontend-angular/dist', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
                         remoteDirectory: '/home/ec2-user' // Specifies the destination directory on the EC2 server.
                     )
                 ],
