@@ -54,7 +54,7 @@ pipeline {
                     sshTransfer(
                         sourceFiles: 'frontend-angular/dist/**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
                         removePrefix: 'frontend-angular/dist', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
-                        remoteDirectory: '/home/ec2-user' // Specifies the destination directory on the EC2 server.
+                        remoteDirectory: 'dist' // Specifies the destination directory on the EC2 server.
                     )
                 ],
                 verbose: true // Enables detailed output in the build logs for debugging.
