@@ -53,7 +53,7 @@ pipeline {
                 transfers: [
                     sshTransfer(
                         sourceFiles: '**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
-                        removePrefix: 'dist/litcord', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
+                        // removePrefix: '', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
                         remoteDirectory: '/home/ec2-user' // Specifies the destination directory on the EC2 server.
                     )
                 ],
