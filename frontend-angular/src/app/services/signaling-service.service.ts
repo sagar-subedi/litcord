@@ -11,7 +11,7 @@ export class SignalingService {
 
   constructor() {
     this.stompClient = new Client({
-      brokerURL: 'wss://65.0.71.191:8081/ws', // Backend WebSocket URL
+      brokerURL: 'wss://litcord-api.sagar88.com.np/ws', // Backend WebSocket URL
       connectHeaders: {},
       debug: (str) => {
         console.log(str);
