@@ -54,10 +54,10 @@ pipeline {
                     sshTransfer(
                         sourceFiles: 'frontend-angular/dist/**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
                         removePrefix: 'frontend-angular/dist', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
-                        remoteDirectory: '' // Specifies the destination directory on the EC2 server.
+                        remoteDirectory: '/dist' // Specifies the destination directory on the EC2 server.
                     )
                 ],
-                execCommand: 'sudo mv /dist/litcord /usr/share/nginx/html && sudo systemctl restart nginx',
+                execCommand: 'sudo mv /dist/litcord /usr/share/nginx/html',
                 verbose: true // Enables detailed output in the build logs for debugging.
             )
         ])
