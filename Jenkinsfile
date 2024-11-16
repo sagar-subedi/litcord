@@ -60,12 +60,14 @@ pipeline {
                 verbose: true // Enables detailed output in the build logs for debugging.
             )
         ])
-        steps {
+            }
+        }
+        stage('Post Deployment Commands') {
+            steps {
                 sshCommand remote: 'Litcord EC2', command: '''
-                    sudo mv /dist/litcord /usr/share/nginx/html/
+                    sudo mv /dist/litcord /usr/share/nginx/html/litcord
                     sudo systemctl restart nginx
                 '''
-            }
             }
         }
     }
