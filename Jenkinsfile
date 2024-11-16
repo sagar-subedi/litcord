@@ -40,9 +40,6 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {
-                    sh 'pwd; ls;'
-                }
                 sshPublisher(publishers: [
             sshPublisherDesc(
                 configName: 'Litcord EC2', // This is a predefined SSH configuration in Jenkins.
