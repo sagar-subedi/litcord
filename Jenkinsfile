@@ -62,6 +62,14 @@ pipeline {
         ])
             }
         }
+        stage('Post Deployment Commands') {
+            steps {
+                sshCommand remote: 'Litcord EC2', command: '''
+                    sudo mv /dist/litcord /usr/share/nginx/html/litcord
+                    sudo systemctl restart nginx
+                '''
+            }
+        }
     }
 
     post {
