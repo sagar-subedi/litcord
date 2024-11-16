@@ -57,7 +57,7 @@ pipeline {
                         remoteDirectory: '' // Specifies the destination directory on the EC2 server.
                     )
                 ],
-                execCommand: 'sudo mv /dist/litcord /usr/share/nginx/html && sudo systemctl restart nginx'
+                execCommand: 'sudo mv /dist/litcord /usr/share/nginx/html && sudo systemctl restart nginx',
                 verbose: true // Enables detailed output in the build logs for debugging.
             )
         ])
