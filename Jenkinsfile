@@ -57,7 +57,7 @@ pipeline {
                         remoteDirectory: '/dist' // Specifies the destination directory on the EC2 server.
                     )
                 ],
-                execCommand: 'sudo mv /dist/litcord /usr/share/nginx/html',
+                execCommand: 'sudo cp -r /dist/litcord /usr/share/nginx/html',
                 verbose: true // Enables detailed output in the build logs for debugging.
             )
         ])
