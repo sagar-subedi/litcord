@@ -3,7 +3,7 @@ package com.sagarsubedi.litcord.service.auth;
 import com.sagarsubedi.litcord.Exceptions.ProfileCreationConflictException;
 import com.sagarsubedi.litcord.config.JwtService;
 import com.sagarsubedi.litcord.dao.ProfileRepository;
-import com.sagarsubedi.litcord.dto.request.LoginDTO;
+import com.sagarsubedi.litcord.dto.LoginDTO;
 import com.sagarsubedi.litcord.dto.request.ProfileCreateDTO;
 import com.sagarsubedi.litcord.dto.response.LoginResponse;
 import com.sagarsubedi.litcord.model.Profile;
@@ -33,7 +33,7 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<LoginResponse> login(LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponse>    login(LoginDTO loginDTO) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
