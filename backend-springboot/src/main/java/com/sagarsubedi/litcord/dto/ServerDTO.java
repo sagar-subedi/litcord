@@ -1,10 +1,14 @@
-package com.sagarsubedi.litcord.dto.request;
+package com.sagarsubedi.litcord.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class ServerCreateDTO {
+@Data
+@NoArgsConstructor
+public class ServerDTO {
 
     @NotBlank(message = "Name cannot be blank")
     private String name;
@@ -15,32 +19,14 @@ public class ServerCreateDTO {
     @NotNull(message = "User ID cannot be null")
     private Long userId;
 
-    // Default constructor
-    public ServerCreateDTO() {
-    }
-
     // Constructor with fields
-    public ServerCreateDTO(String name, Long userId) {
+    public ServerDTO(String name, Long userId) {
         this.name = name;
         this.userId = userId;
     }
-
-    // Getters and Setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public ServerDTO(String name, String inviteCode, Long userId) {
         this.name = name;
-    }
-
-
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
         this.userId = userId;
+        this.inviteCode = inviteCode;
     }
 }

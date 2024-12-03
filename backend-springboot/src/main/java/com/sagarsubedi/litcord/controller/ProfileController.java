@@ -2,11 +2,8 @@ package com.sagarsubedi.litcord.controller;
 
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.dto.request.ProfileCreateDTO;
-import com.sagarsubedi.litcord.dto.request.ServerCreateDTO;
 import com.sagarsubedi.litcord.model.Profile;
-import com.sagarsubedi.litcord.model.Server;
 import com.sagarsubedi.litcord.service.profile.ProfileService;
-import com.sagarsubedi.litcord.service.server.ServerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

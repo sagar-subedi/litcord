@@ -5,8 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Server {
 
     @Id
@@ -26,25 +30,5 @@ public class Server {
         this.name = name;
         this.inviteCode = inviteCode;
         this.userId = userId;
-    }
-
-    public Server(){
-
-    }
-    // Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getInviteCode() {
-        return inviteCode;
-    }
-
-    public Long getUserId() {
-        return userId;
     }
 }
