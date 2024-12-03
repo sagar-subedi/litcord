@@ -1,8 +1,9 @@
 package com.sagarsubedi.litcord.controller;
 
-import com.sagarsubedi.litcord.Exceptions.ProfileCreationConflictException;
+import com.sagarsubedi.litcord.Exceptions.AccountCreationConflictException;
 import com.sagarsubedi.litcord.dto.LoginDTO;
-import com.sagarsubedi.litcord.dto.request.ProfileCreateDTO;
+import com.sagarsubedi.litcord.dto.AccountDTO;
+import com.sagarsubedi.litcord.model.Account;
 import com.sagarsubedi.litcord.model.Profile;
 import com.sagarsubedi.litcord.service.auth.AuthService;
 import jakarta.validation.Valid;
@@ -30,11 +31,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody ProfileCreateDTO profileCreateDTO) {
+    public ResponseEntity<?> register(@Valid @RequestBody AccountDTO accountDTO) {
         try {
-            Profile createProfile = authService.register(profileCreateDTO);
-            return new ResponseEntity<>(createProfile.getId().toString(), HttpStatus.CREATED);
-        } catch (ProfileCreationConflictException e) {
+            Account createdAccount = authService.register(accountDTO);
+            return new ResponseEntity<>(createdAccount.getId().toString(), HttpStatus.CREATED);
+        } catch (AccountCreationConflictException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
             return new ResponseEntity<>("Something happened. Profile/User not created.", HttpStatus.CONFLICT);

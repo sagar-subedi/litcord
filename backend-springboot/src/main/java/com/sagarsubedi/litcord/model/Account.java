@@ -8,7 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Profile {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     private Long id;
@@ -19,18 +19,18 @@ public class Profile {
     private String email;
     private String password;
 
-    public Profile(String name,String email){
+    public Account(String name,String email){
         this.name = name;
         this.email = email;
     }
 
-    public Profile(String name,String email, String password){
+    public Account(String name,String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public Profile(){
+    public Account(){
 
     }
 

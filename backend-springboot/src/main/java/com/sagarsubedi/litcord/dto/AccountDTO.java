@@ -1,9 +1,9 @@
-package com.sagarsubedi.litcord.dto.request;
+package com.sagarsubedi.litcord.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class ProfileCreateDTO {
+public class AccountDTO {
 
     @NotBlank(message = "Name cannot be blank")
     private String name;
@@ -16,11 +16,11 @@ public class ProfileCreateDTO {
     private String password;
 
     // Default constructor
-    public ProfileCreateDTO() {
+    public AccountDTO() {
     }
 
     // Constructor with fields
-    public ProfileCreateDTO(String name, String email, String password) {
+    public AccountDTO(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
