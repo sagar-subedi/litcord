@@ -1,7 +1,7 @@
 package com.sagarsubedi.litcord.controller;
 
 import com.sagarsubedi.litcord.Exceptions.ProfileCreationConflictException;
-import com.sagarsubedi.litcord.dto.request.LoginDTO;
+import com.sagarsubedi.litcord.dto.LoginDTO;
 import com.sagarsubedi.litcord.dto.request.ProfileCreateDTO;
 import com.sagarsubedi.litcord.model.Profile;
 import com.sagarsubedi.litcord.service.auth.AuthService;
