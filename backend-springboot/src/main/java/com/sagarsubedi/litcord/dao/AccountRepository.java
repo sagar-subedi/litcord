@@ -1,7 +1,6 @@
 package com.sagarsubedi.litcord.dao;
 
 import com.sagarsubedi.litcord.model.Account;
-import com.sagarsubedi.litcord.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
