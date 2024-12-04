@@ -47,4 +47,9 @@ public class ChannelService {
         return channelRepository.findAll();
     }
 
+    //Lists all the channels belonging to a server
+    public List<Channel> getChannelsByServerId(Long serverId) {
+        return channelRepository.findAllByServerId(serverId);
+    }
+
 }
