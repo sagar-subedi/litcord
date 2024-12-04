@@ -15,12 +15,12 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
     private Long memberId;
 
-    private Long channelId;
+    private Long serverId;
 
     private Long userId;
 
-    public Member(Long channelId, Long userId){
-        this.channelId = channelId;
+    public Member(Long serverId, Long userId){
+        this.serverId = serverId;
         this.userId = userId;
     }
 }
