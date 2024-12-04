@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        nodejs "node" // Ensure NodeJS is configured in Jenkins
+        nodejs 'node' // Ensure NodeJS is configured in Jenkins
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/sagar-subedi/litcord.git', branch: 'feature/6-setup-homepage'
+                git url: 'https://github.com/sagar-subedi/litcord.git', branch: 'develop'
             }
         }
 
@@ -28,6 +28,7 @@ pipeline {
             }
         }
 
+	//Commented as frontend tests are not prioritized
         // stage('Test') {
         //     steps {
         //         script {
@@ -36,17 +37,25 @@ pipeline {
         //     }
         // }
 
-        stage('Archive Build Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'build/**', allowEmptyArchive: true
-            }
-        }
 
         stage('Deploy') {
             steps {
-                echo 'Deploy stage - customize deployment here'
-                // Example: copy build files to a directory for local deployment
-                // sh 'cp -r build/* /path/to/deployment/directory'
+                sshPublisher(publishers: [
+            sshPublisherDesc(
+                configName: 'Litcord EC2', // This is a predefined SSH configuration in Jenkins.
+                transfers: [
+                    sshTransfer(
+                        sourceFiles: 'frontend-angular/dist/**', // Specifies the files to transfer. `dist/**` includes all files and folders in the `dist` directory.
+                        removePrefix: 'frontend-angular/dist', // Removes the `dist` prefix from the path during transfer, placing files directly in the target directory.
+                        remoteDirectory: '/dist' // Specifies the destination directory on the EC2 server.
+                    ),
+                    sshTransfer(
+                        execCommand: 'sudo cp -r dist/litcord /usr/share/nginx/html'
+                    )
+                ],
+                verbose: true // Enables detailed output in the build logs for debugging.
+            )
+        ])
             }
         }
     }
