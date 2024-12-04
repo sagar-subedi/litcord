@@ -5,8 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_seq")
@@ -24,16 +27,9 @@ public class Message {
         this.memberId = "Default Member";
     }
 
-    public Long getMessageId(){
-        return messageId;
+    public Message(String message, String memberId, String channelId){
+        this.message = message;
+        this.memberId = memberId;
+        this.channelId = channelId;
     }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getMemberId() {
-        return memberId;
-    }
-    public String getChannelId() {return channelId;}
 }
