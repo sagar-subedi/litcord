@@ -1,7 +1,7 @@
 package com.sagarsubedi.litcord.serviceimpl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sagarsubedi.litcord.model.Profile;
+import com.sagarsubedi.litcord.model.Account;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,12 +28,12 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
     }
 
-    public static UserDetailsImpl build(Profile profile) {
+    public static UserDetailsImpl build(Account account) {
         return new UserDetailsImpl(
-                profile.getId(),
-                profile.getName(),
-                profile.getEmail(),
-                profile.getPassword());
+                account.getId(),
+                account.getName(),
+                account.getEmail(),
+                account.getPassword());
     }
 
     @Override

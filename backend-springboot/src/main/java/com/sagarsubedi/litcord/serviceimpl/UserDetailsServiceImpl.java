@@ -1,7 +1,7 @@
 package com.sagarsubedi.litcord.serviceimpl;
 
-import com.sagarsubedi.litcord.dao.ProfileRepository;
-import com.sagarsubedi.litcord.model.Profile;
+import com.sagarsubedi.litcord.dao.AccountRepository;
+import com.sagarsubedi.litcord.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,15 +15,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     //As of this implementation, UserDetailsServiceImpl needs to be passed profileRepository for instantiation
     //Is @Autowired and constructor injection both necessary
     @Autowired
-    private final ProfileRepository profileRepository;
+    private final AccountRepository accountRepository;
 
-    public UserDetailsServiceImpl(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
+    public UserDetailsServiceImpl(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Profile user = profileRepository.findProfileByEmail(email)
+        Account user = accountRepository.findAccountByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Error: User not found for the email: " + email));
 
         return UserDetailsImpl.build(user);

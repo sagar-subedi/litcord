@@ -1,6 +1,6 @@
 package com.sagarsubedi.litcord.config;
 
-import com.sagarsubedi.litcord.dao.ProfileRepository;
+import com.sagarsubedi.litcord.dao.AccountRepository;
 import com.sagarsubedi.litcord.serviceimpl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +25,10 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @EnableWebSecurity
 public class WebSecurityConfig {
     @Autowired
-    ProfileRepository profileRepository;
+    AccountRepository accountRepository;
 
     public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl(profileRepository);
+        return new UserDetailsServiceImpl(accountRepository);
     }
 
     @Autowired
