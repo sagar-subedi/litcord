@@ -49,4 +49,10 @@ public class MemberService {
             throw new RuntimeException("Member not found with ID: " + memberId);
         }
     }
+
+    //Retrieves all memberships that a user belongs to
+    //used to get all the servers a user is in
+    public List<Member> getMembersByMemberId(Long memberId) {
+        return memberRepository.findAllByMemberId(memberId);
+    }
 }
