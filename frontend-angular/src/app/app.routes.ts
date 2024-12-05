@@ -1,13 +1,25 @@
 import { Routes } from '@angular/router';
-import { AuthComponent } from './pages/auth/auth.component';
 import { HomeComponent } from './pages/home/home.component';
-import { HomeGuard } from './guards/home.guard';
 import { TestComponent } from './components/test/test.component';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginComponent } from './pages/auth/login/login.component';
+import { RegisterComponent } from './pages/auth/register/register.component';
 
 export const routes: Routes = [
-    { path: '', canActivate: [HomeGuard], pathMatch: 'full', component: HomeComponent},   //canActivate will always return false, so always redirection
-    {path:'servers/:serverid/channels/:channelid', component: HomeComponent},
-    { path: 'servers', redirectTo: '/servers/23/channels/22', pathMatch: 'full' },
-    {path: 'auth', component: AuthComponent},
-    {path: 'test', component: TestComponent}
+    { path: '', redirectTo: '/auth/login', pathMatch: 'full' }, // Default redirect to login
+    { 
+      path: 'servers/:serverid/channels/:channelid', 
+      canActivate: [AuthGuard], 
+      component: HomeComponent 
+    },
+    { 
+      path: 'servers', 
+      redirectTo: '/servers/23/channels/22', 
+      pathMatch: 'full' 
+    },
+    { path: 'auth', redirectTo: '/auth/login', pathMatch: 'full' },
+    { path: 'auth/login', component: LoginComponent },
+    { path: 'auth/register', component: RegisterComponent },
+    { path: 'test', component: TestComponent },
+    { path: '**', redirectTo: '/auth/login' } // Redirect invalid routes
 ];
