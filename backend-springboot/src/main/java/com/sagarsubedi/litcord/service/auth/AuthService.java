@@ -1,12 +1,12 @@
 package com.sagarsubedi.litcord.service.auth;
 
-import com.sagarsubedi.litcord.Exceptions.ProfileCreationConflictException;
+import com.sagarsubedi.litcord.Exceptions.AccountCreationConflictException;
 import com.sagarsubedi.litcord.config.JwtService;
-import com.sagarsubedi.litcord.dao.ProfileRepository;
-import com.sagarsubedi.litcord.dto.request.LoginDTO;
-import com.sagarsubedi.litcord.dto.request.ProfileCreateDTO;
+import com.sagarsubedi.litcord.dao.AccountRepository;
+import com.sagarsubedi.litcord.dto.LoginDTO;
+import com.sagarsubedi.litcord.dto.AccountDTO;
 import com.sagarsubedi.litcord.dto.response.LoginResponse;
-import com.sagarsubedi.litcord.model.Profile;
+import com.sagarsubedi.litcord.model.Account;
 import com.sagarsubedi.litcord.serviceimpl.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +28,12 @@ public class AuthService {
     private JwtService jwtService;
 
     @Autowired
-    private ProfileRepository profileRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ResponseEntity<LoginResponse> login(LoginDTO loginDTO) {
+    public ResponseEntity<LoginResponse>    login(LoginDTO loginDTO) {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
 
@@ -48,11 +48,11 @@ public class AuthService {
                 .build());
     }
 
-    public Profile register(ProfileCreateDTO profileCreateDTO) {
-        Optional<Profile> profile = profileRepository.findProfileByEmail(profileCreateDTO.getEmail());
-        if (profile.isPresent()) {
-            throw new ProfileCreationConflictException("The email is already used by another profile");
+    public Account register(AccountDTO accountDTO) {
+        Optional<Account>  account = accountRepository.findAccountByEmail(accountDTO.getEmail());
+        if (account.isPresent()) {
+            throw new AccountCreationConflictException("The email is already used by another account");
         }
-        return profileRepository.save(new Profile(profileCreateDTO.getName(), profileCreateDTO.getEmail(), passwordEncoder.encode(profileCreateDTO.getPassword())));
+        return accountRepository.save(new Account(accountDTO.getName(), accountDTO.getEmail(), passwordEncoder.encode(accountDTO.getPassword())));
     }
 }

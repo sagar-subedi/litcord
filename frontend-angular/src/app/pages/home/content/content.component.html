@@ -1,0 +1,30 @@
+<div
+  id="content-col"
+  class="flex flex-col justify-start min-w-[30rem] w-full h-full flex-grow bg-gray-500 p-5 pb-0"
+>
+  <div
+    class="flex items-center p-4 bg-gray-800 text-white shadow-md rounded-lg mb-3"
+  >
+    <!-- Icon -->
+    <div class="flex mr-2">
+      <ng-container *ngIf="channel.type === 'text'; else videoIcon">
+        <mat-icon>chat</mat-icon>
+      </ng-container>
+      <ng-template #videoIcon>
+        <mat-icon>videocam</mat-icon>
+      </ng-template>
+    </div>
+
+    <!-- Channel Name -->
+    <h1 class="text-lg font-semibold">{{ channel.name }}</h1>
+  </div>
+
+  <!-- Display call component or chat component based on type of channel -->
+  <div
+    *ngIf="channel.type === 'video'"
+    class="h-full flex flex-col justify-center flex-grow"
+  >
+    <app-video-call [channel]="channel"></app-video-call>
+  </div>
+ <app-chat *ngIf="channel.type === 'text'"></app-chat>
+</div>

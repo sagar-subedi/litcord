@@ -1,0 +1,65 @@
+<div
+  class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50"
+  *ngIf="isModalOpen"
+>
+  <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-medium">Create Channel</h3>
+      <button
+        class="text-gray-500 hover:text-gray-700"
+        (click)="closeModal()"
+      >
+        ✖
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <form (ngSubmit)="createChannel()" class="space-y-4">
+      <!-- Channel Name -->
+      <div>
+        <label
+          for="channelName"
+          class="block text-gray-700 font-medium mb-2"
+        >Channel Name</label>
+        <input
+          type="text"
+          id="channelName"
+          [(ngModel)]="channelName"
+          name="channelName"
+          required
+          placeholder="Enter channel name"
+          class="border text-black border-gray-300 rounded-lg w-full px-4 py-2"
+        />
+      </div>
+
+      <!-- Channel Type -->
+      <div class="text-black">
+        <label
+          for="channelType"
+          class="block text-gray-700 font-medium mb-2"
+        >Channel Type</label>
+        <select
+          id="channelType"
+          [(ngModel)]="channelType"
+          name="channelType"
+          required
+          class="border border-gray-300 rounded-lg w-full px-4 py-2"
+        >
+          <option value="" disabled class="text-black">Select type</option>
+          <option value="Text" class="text-black">Text</option>
+          <option value="Video" class="text-black">Video</option>
+        </select>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="bg-blue-500 text-white rounded-lg px-6 py-2 w-full hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        [disabled]="!channelName.trim() || !channelType"
+      >
+        Create Channel
+      </button>
+    </form>
+  </div>
+</div>

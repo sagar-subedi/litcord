@@ -5,8 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Channel {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "channel_seq")
@@ -15,6 +19,7 @@ public class Channel {
     @Column(name = "name", nullable = false)
     private String name;
 
+    //Id of the admin of the channel
     @Column(name = "profileId", nullable = false)
     private Long profileId;
 
@@ -25,25 +30,5 @@ public class Channel {
         this.name = name;
         this.profileId = profileId;
         this.serverId = serverId;
-    }
-
-    public Channel(){
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getServerId() {
-        return serverId;
-    }
-
-    public Long getProfileId() {
-        return profileId;
     }
 }

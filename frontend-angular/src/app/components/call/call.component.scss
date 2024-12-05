@@ -1,0 +1,36 @@
+video {
+  width: 100%;
+  object-fit: cover; /* Cover the entire container */
+  background-color: black; /* Default black background for video */
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center items horizontally */
+  gap: 16px; /* Add spacing between items */
+}
+
+.item {
+  flex: 1 1 calc(33.333% - 16px); /* Allow items to grow, shrink, and take up a third of the row */
+  max-width: calc(
+    33.333% - 16px
+  ); /* Prevent items from exceeding a third of the row */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+  text-align: center; /* Center text inside each item */
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .item {
+    flex: 1 1 calc(50% - 16px); /* Adjust to 2 items per row for smaller screens */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media (max-width: 480px) {
+  .item {
+    flex: 1 1 100%; /* Adjust to 1 item per row for very small screens */
+    max-width: 100%;
+  }
+}

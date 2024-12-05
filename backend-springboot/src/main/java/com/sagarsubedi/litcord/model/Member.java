@@ -4,34 +4,23 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Data
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
     private Long memberId;
 
-    private Long channelId;
+    private Long serverId;
 
     private Long userId;
 
-    public Member(Long channelId, Long userId){
-        this.channelId = channelId;
+    public Member(Long serverId, Long userId){
+        this.serverId = serverId;
         this.userId = userId;
-    }
-
-    public Member(){
-
-    }
-
-    public Long getChannelId(){
-        return channelId;
-    }
-    public Long getMemberId(){
-        return memberId;
-    }
-
-    public Long userId(){
-        return userId;
     }
 }

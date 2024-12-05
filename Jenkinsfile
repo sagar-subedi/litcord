@@ -27,7 +27,7 @@ pipeline {
                 }
             }
         }
-        
+
 	//Commented as frontend tests are not prioritized
         // stage('Test') {
         //     steps {
