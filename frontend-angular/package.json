@@ -23,6 +23,7 @@
     "@stomp/ng2-stompjs": "^8.0.0",
     "@stomp/rx-stomp": "^2.0.0",
     "@stomp/stompjs": "^7.0.0",
+    "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "sockjs-client": "^1.6.1",
     "tslib": "^2.3.0",
