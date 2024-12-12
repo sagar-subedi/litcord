@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MessageRepository extends JpaRepository<Message,Long> {
     // Get the last 'n' messages for a specific channelId, ordered by messageId descending
-    @Query("SELECT m FROM Message m WHERE m.channelId = :channelId ORDER BY m.messageId DESC")
-    List<Message> findLastNMessagesByChannelId(Long channelId, Pageable pageable);
+//    @Query("SELECT m FROM Message m WHERE m.channelId = :channelId ORDER BY m.messageId DESC")
+//    List<Message> findLastNMessagesByChannelId(Long channelId, Pageable pageable);
 
 }

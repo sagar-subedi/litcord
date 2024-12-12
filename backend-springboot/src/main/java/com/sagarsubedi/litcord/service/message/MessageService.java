@@ -47,10 +47,10 @@ public class MessageService {
         return messageRepository.findById(messageId);
     }
     // Get last 'n' messages for a given channelId
-    public List<Message> getLastNMessages(Long channelId, int n) {
-        Pageable pageable = (Pageable) PageRequest.of(0, n); // Pageable for first 'n' messages
-        return messageRepository.findLastNMessagesByChannelId(channelId, pageable);
-    }
+//    public List<Message> getLastNMessages(Long channelId, int n) {
+//        Pageable pageable = (Pageable) PageRequest.of(0, n); // Pageable for first 'n' messages
+////        return messageRepository.findLastNMessagesByChannelId(channelId, pageable);
+//    }
 }
 
 
