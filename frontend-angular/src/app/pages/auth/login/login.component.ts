@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -18,8 +18,16 @@ export class LoginComponent {
 
   login() {
     // Call your login API and fetch the token
-    const fakeToken = 'your.jwt.token'; // Replace with API response
-    this.authService.setToken(fakeToken);
-    this.router.navigate(['/servers/23/channels/22']);
+    this.authService.login(this.username, this.password).subscribe(
+      (response: any) => {
+        this.authService.setToken(response.token); 
+        // Save the token
+        this.router.navigate(['/']); // Redirect to the home page
+      },
+      (error:any) => {
+        console.error('Login failed:', error);
+        alert('Invalid email or password'); // User feedback
+      }
+    );
   }
 }
