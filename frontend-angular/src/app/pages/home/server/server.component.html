@@ -17,8 +17,9 @@
         </div>
         <div class="flex flex-col min-h-20 min-w-20 items-center gap-2 justify-stretch">
             <mat-icon class="text-5xl h-10">dark_mode</mat-icon>
-            <mat-icon class="text-5xl h-10">account_circle_outlined</mat-icon>
+            <mat-icon class="text-5xl h-10" (click)="openProfileModal()">account_circle_outlined</mat-icon>
         </div>
     </div>
     <app-channel [server]="selectedServer"></app-channel>
 </div>
+<app-account-modal *ngIf="isProfileModalOpen" (close)="closeProfileModal()"></app-account-modal>

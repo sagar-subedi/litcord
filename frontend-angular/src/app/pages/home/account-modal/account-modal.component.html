@@ -1,0 +1,57 @@
+<!-- profile-popup.component.html -->
+<div class="fixed inset-0 bg-gray-600 bg-opacity-75 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-80">
+        <div class="flex justify-between items-center border-b pb-1 mb-3">
+            <h3 class="text-black text-xl font-semibold">Update Profile</h3>
+            <button 
+              class="text-gray-500 hover:text-gray-800 focus:outline-none" 
+              (click)="closeModal()"
+              aria-label="Close Modal">
+              <mat-icon>cancel</mat-icon>
+            </button>
+        </div>
+      <!-- Update Profile Form -->
+      <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+        <div class="mb-4">
+          <label class="text-black block text-sm font-medium mb-1">Full Name</label>
+          <input 
+            type="text" 
+            formControlName="name" 
+            class="text-black w-full border rounded-md px-3 py-2"
+          />
+        </div>
+        
+        <div class="mb-4">
+          <label class="text-black block text-sm font-medium mb-1">Email</label>
+          <input 
+            type="email" 
+            formControlName="email" 
+            class="text-black w-full border rounded-md px-3 py-2"
+          />
+        </div>
+  
+        <div class="flex justify-between space-x-4">
+            <button
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none"
+                (click)="updateProfile()"
+            >
+                Save Changes
+            </button>
+            <button
+                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 focus:outline-none"
+                (click)="closeModal()"
+            >
+                Cancel
+            </button>
+        </div>
+      </form>
+  
+      <!-- Logout Button -->
+      <button 
+        (click)="logout()" 
+        class="mt-4 w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600">
+        Logout
+      </button>
+    </div>
+  </div>
+  
