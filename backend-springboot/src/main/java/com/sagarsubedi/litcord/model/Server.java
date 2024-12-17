@@ -26,6 +26,8 @@ public class Server {
     @Column(name = "userId", nullable = false)
     private Long userId;
 
+    private String dpUrl;
+
     public Server(String name, String inviteCode, Long userId) {
         this.name = name;
         this.inviteCode = inviteCode;

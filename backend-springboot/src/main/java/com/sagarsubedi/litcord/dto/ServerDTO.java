@@ -19,14 +19,17 @@ public class ServerDTO {
     @NotNull(message = "User ID cannot be null")
     private Long userId;
 
+    private String dpUrl;
+
     // Constructor with fields
     public ServerDTO(String name, Long userId) {
         this.name = name;
         this.userId = userId;
     }
-    public ServerDTO(String name, String inviteCode, Long userId) {
+    public ServerDTO(String name, String inviteCode, Long userId, String dpUrl) {
         this.name = name;
         this.userId = userId;
         this.inviteCode = inviteCode;
+        this.dpUrl = dpUrl;
     }
 }

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -27,10 +29,15 @@ public class ServerController {
     private ServerService serverService;
 
     @PostMapping
-    public ResponseEntity<String> createServer(@RequestBody ServerDTO server){
+    public ResponseEntity<String> createServer(
+            @RequestParam("name") String name,
+            @RequestParam("userId") Long userId,
+            @RequestParam("dp") MultipartFile dp
+    ){
         try{
-            if(!server.getName().isBlank()) {
-                Server createdServer = serverService.createServer(server.getName(), server.getUserId());
+// Add validation to ensure that a user can only add a server to only his account, i.e username fromm token should match with the uerId passed with request
+            if(!name.isBlank()) {
+                Server createdServer = serverService.createServer(name, userId, dp);
                 return new ResponseEntity<>(createdServer.getId().toString(), HttpStatus.CREATED);
             }
             throw new Exception("Server name can't be blank");
