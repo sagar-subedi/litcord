@@ -2,6 +2,7 @@ package com.sagarsubedi.litcord.service.server;
 
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
+import com.sagarsubedi.litcord.dao.MembershipRepository;
 import com.sagarsubedi.litcord.dao.ServerRepository;
 import com.sagarsubedi.litcord.dto.ServerDTO;
 import com.sagarsubedi.litcord.model.Server;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 public class ServerService {
     @Autowired
     ServerRepository serverRepository;
+
+    @Autowired
+    MembershipRepository membershipRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -117,5 +121,9 @@ public class ServerService {
         return serverRepository.findAll().stream()
                 .map(server -> modelMapper.map(server, ServerDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public boolean isUserAuthorized(Long userId, Long serverId) {
+        return membershipRepository.existsByUserIdAndServerId(userId, serverId);
     }
 }
