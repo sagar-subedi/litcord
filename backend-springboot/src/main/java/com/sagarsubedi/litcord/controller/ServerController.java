@@ -2,6 +2,7 @@ package com.sagarsubedi.litcord.controller;
 
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
+import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.ServerDTO;
 import com.sagarsubedi.litcord.model.Server;
 import com.sagarsubedi.litcord.service.server.ServerService;
@@ -81,6 +82,17 @@ public class ServerController {
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong. Server not deleted.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/user")
+    public List<ServerDTO> getServersForUser(@RequestParam Long userId) {
+        return serverService.getServersForUser(userId);
+    }
+
+    @PostMapping("/channels")
+    public ResponseEntity<String> addChannel(@RequestBody ChannelDTO channel) {
+        serverService.addChannelToServer(channel);
+        return new ResponseEntity<>("Channel Added", HttpStatus.CREATED);
     }
 
     // List all servers

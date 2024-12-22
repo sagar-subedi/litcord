@@ -12,6 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class ServerDTO {
 
+    private Long id;
+
     @NotBlank(message = "Name cannot be blank")
     private String name;
 
@@ -30,7 +32,8 @@ public class ServerDTO {
         this.name = name;
         this.userId = userId;
     }
-    public ServerDTO(String name, String inviteCode, Long userId, String dpUrl, List<ChannelDTO> channels) {
+    public ServerDTO(Long id, String name, String inviteCode, Long userId, String dpUrl, List<ChannelDTO> channels) {
+        this.id = id;
         this.name = name;
         this.userId = userId;
         this.inviteCode = inviteCode;
