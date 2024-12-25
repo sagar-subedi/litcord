@@ -4,9 +4,11 @@ import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
 import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.ServerDTO;
+import com.sagarsubedi.litcord.model.Channel;
 import com.sagarsubedi.litcord.model.Server;
 import com.sagarsubedi.litcord.service.server.ServerService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,9 @@ import java.util.List;
 public class ServerController {
     @Autowired
     private ServerService serverService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<String> createServer(
@@ -76,7 +81,7 @@ public class ServerController {
     public ResponseEntity<String> deleteServer(@PathVariable Long id) {
         try {
             serverService.deleteServer(id);
-            return ResponseEntity.ok("Server deleted successfully.");
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ServerNotFoundException e) {
             return new ResponseEntity<>("Server not found.", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
@@ -86,13 +91,14 @@ public class ServerController {
 
     @GetMapping("/user")
     public List<ServerDTO> getServersForUser(@RequestParam Long userId) {
-        return serverService.getServersForUser(userId);
+            return serverService.getServersForUser(userId);
     }
 
     @PostMapping("/channels")
-    public ResponseEntity<String> addChannel(@RequestBody ChannelDTO channel) {
-        serverService.addChannelToServer(channel);
-        return new ResponseEntity<>("Channel Added", HttpStatus.CREATED);
+    public ResponseEntity<ChannelDTO> addChannel(@RequestBody ChannelDTO channel) {
+        Channel channelEntity = serverService.addChannelToServer(channel);
+        ChannelDTO dto = modelMapper.map(channelEntity, ChannelDTO.class);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     // List all servers
