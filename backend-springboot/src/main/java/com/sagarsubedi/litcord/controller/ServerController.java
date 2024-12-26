@@ -35,7 +35,7 @@ public class ServerController {
     private ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<String> createServer(
+    public ResponseEntity<ServerDTO> createServer(
             @RequestParam("name") String name,
             @RequestParam("userId") Long userId,
             @RequestParam("dp") MultipartFile dp
@@ -44,13 +44,12 @@ public class ServerController {
 // Add validation to ensure that a user can only add a server to only his account, i.e username fromm token should match with the uerId passed with request
             if(!name.isBlank()) {
                 Server createdServer = serverService.createServer(name, userId, dp);
-                return new ResponseEntity<>(createdServer.getId().toString(), HttpStatus.CREATED);
+                ServerDTO createdServerDTO = modelMapper.map(createdServer, ServerDTO.class);
+                return new ResponseEntity<>(createdServerDTO, HttpStatus.CREATED);
             }
             throw new Exception("Server name can't be blank");
-        }catch(ServerCreationConflictException e){
-            return new ResponseEntity<>("Server already present", HttpStatus.CONFLICT);
-    }catch(Exception e){
-            return new ResponseEntity<>("Something happened. Channel not created.", HttpStatus.CONFLICT);
+        } catch(Exception e){
+            return new ResponseEntity<>(new ServerDTO(), HttpStatus.CONFLICT);
         }
     }
 
