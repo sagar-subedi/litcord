@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ServerService } from '../../../services/server.service';
+import { ActivatedRoute, Route } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -13,6 +15,12 @@ export class CreateChannelModalComponent {
   isModalOpen: boolean = false;
   channelName: string = '';
   channelType: string = '';
+
+  @Output() channelCreated = new EventEmitter<any>;
+
+  constructor(private serverService: ServerService, private route: ActivatedRoute){
+
+  }
 
   openModal() {
     this.isModalOpen = true;
@@ -28,10 +36,20 @@ export class CreateChannelModalComponent {
     if (this.channelName.trim() && this.channelType) {
       const newChannel = {
         name: this.channelName,
-        type: this.channelType
+        type: this.channelType,
+        adminId: 1,
+        serverId: this.route.snapshot.params['serverid']
       };
-      console.log('Channel Created:', newChannel);
-      this.closeModal();
+//todo: make sure the hardcoded adminId or userId are handled in coming stories
+
+      this.serverService.createChannel(newChannel).subscribe(
+        {
+          next: (data: string) => {
+            this.closeModal();
+            this.channelCreated.emit(data);
+          }
+        }
+      );
     }
   }
 }
