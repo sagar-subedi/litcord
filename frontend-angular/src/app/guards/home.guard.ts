@@ -19,8 +19,8 @@ export class HomeGuard implements CanActivate {
       map((response: any) => {
         // Assuming the response contains the server and channel IDs
         console.log(response);
-        const serverId = response.servers[0].id;
-        const channelId = response.servers[0].channels[0].id;
+        const serverId = response[0].id;
+        const channelId = response[0].channels[0].id;
 
         // Navigate to the determined route
         this.router.navigate([`/servers/${serverId}/channels/${channelId}`]);

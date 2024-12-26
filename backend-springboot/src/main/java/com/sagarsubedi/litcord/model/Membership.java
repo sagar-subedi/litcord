@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-public class Member {
+public class Membership {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
-    private Long memberId;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "membership_seq")
+    private Long membershipId;
 
     private Long serverId;
 
     private Long userId;
 
-    public Member(Long serverId, Long userId){
+    public Membership(Long serverId, Long userId){
         this.serverId = serverId;
         this.userId = userId;
     }

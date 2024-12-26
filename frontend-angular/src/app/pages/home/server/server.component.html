@@ -1,7 +1,7 @@
-<div class="flex flex-row h-full">
+<div class="flex flex-row w-full h-full" *ngIf="servers.length>0"  >
     <div id="servers-col" class="flex flex-col min-w-[5rem] bg-black justify-start items-center">
         <div class="flex flex-col pt-5">
-            <button (click)="onClickAddServer()">
+            <button (click)="openModal()">
                 <mat-icon>add_circle</mat-icon>
             </button>
         </div>
@@ -12,7 +12,7 @@
     
         <div class="flex gap-3 mt-2 flex-col flex-grow items-center">
             <div (click)="onSelectServer(server)" *ngFor="let server of servers" [ngClass]="[server.id==selectedServer.id?'border-2 border-white bg-gray-400 hover:bg-gray-700':'bg-gray-300 hover:bg-gray-500', ' rounded-full','p-2','transition', 'transition-30', 'ease-in-out']">
-                    <img class="max-w-[40px] max-h-[40px]" src="{{server.imageUrl}}" alt="">
+                    <img class="w-12 h-12 object-cover rounded-full max-w-[40px] max-h-[40px]" src="{{server.dpUrl}}" alt="">
             </div>
         </div>
         <div class="flex flex-col min-h-20 min-w-20 items-center gap-2 justify-stretch">
@@ -20,6 +20,12 @@
             <mat-icon class="text-5xl h-10" (click)="openProfileModal()">account_circle_outlined</mat-icon>
         </div>
     </div>
-    <app-channel [server]="selectedServer"></app-channel>
+    <app-channel class="w-full" (serverDelete)="onDeleteServer($event)" [server]="selectedServer"></app-channel>
 </div>
 <app-account-modal *ngIf="isProfileModalOpen" (close)="closeProfileModal()"></app-account-modal>
+
+<app-create-server-modal
+[isVisible]="isCreateServerModalOpen"
+(close)="closeModal()"
+(serverCreated)="onServerCreated($event)">
+</app-create-server-modal>

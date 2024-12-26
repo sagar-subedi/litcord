@@ -1,95 +1,118 @@
-<div id="channels-col" class="flex flex-col items-center w-full h-full min-w-[25rem] bg-gray-600 p-10">
+<div class="flex flex-row h-full w-full">
+  <div
+    id="channels-col"
+    class="flex flex-col items-center h-full min-w-[25rem] bg-gray-600 p-10"
+  >
     <div class="flex flex-row justify-between w-full font-bold">
-        <div class="w-full relative inline-block">
-            <!-- Server Name -->
-            <button
-              class="flex flex-row justify-between w-full bg-gray-800 text-white px-4 py-2 mb-2 rounded-lg focus:outline-none"
-              (click)="toggleDropdown()"
-            >
-                <div>
-                    {{server.name}}
-                </div>
-                <div>
-                    <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="">keyboard_arrow_down</mat-icon>
-                </div>
-            </button>
-          
-            <!-- Dropdown Menu -->
-            <div
-              *ngIf="isDropdownOpen"
-              class="absolute bg-white border border-gray-200 rounded-lg shadow-lg mt-2 w-48 z-50"
-            >
-              <ul class="py-2">
-                <li>
-                  <button
-                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    (click)="invitePeople()"
-                  >
-                    Invite People
-                  </button>
-                </li>
-                <li>
-                  <button
-                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    (click)="serverSettings()"
-                  >
-                    Server Settings
-                  </button>
-                </li>
-                <li>
-                  <button
-                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    (click)="manageMembers()"
-                  >
-                    Manage Members
-                  </button>
-                </li>
-                <li>
-                  <button
-                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                    (click)="createChannel()"
-                  >
-                    Create Channel
-                  </button>
-                </li>
-                <li>
-                  <button
-                    class="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
-                    (click)="deleteServer()"
-                  >
-                    Delete Server
-                  </button>
-                </li>
-              </ul>
-            </div>
+      <div class="w-full relative inline-block">
+        <!-- Server Name -->
+        <button
+          class="flex flex-row justify-between w-full bg-gray-800 text-white px-4 py-2 mb-2 rounded-lg focus:outline-none"
+          (click)="toggleDropdown()"
+        >
+          <div>
+            {{ server.name }}
           </div>
-          
-    </div>
-    
-    <!-- text channel group -->
-    <div class="flex flex-row justify-between w-full">
-        <h3 class=" text-gray-400">TEXT CHANNELS</h3>
-        <mat-icon (click)="modal.openModal()">add_circle</mat-icon>
-    </div>
-    <div class="font-medium w-full">
-        
-        <ng-container *ngFor="let channel of textChannels" >
-            <app-channel-button (click)="onClickChannelButton(channel.id)" [isSelected]="channel.id==selectedChannel.id" [channel]="channel"></app-channel-button>
-        </ng-container>
-      
-    </div>
-   
-    <!-- Video Channel Group -->
-    <div class="flex flex-row justify-between text-gray-100 w-full">
-        <h3 class="text-gray-400">VIDEO CHANNELS</h3>
-        <mat-icon (click)="modal.openModal()">add_circle</mat-icon>
-    </div>
-    
-    <div class="font-medium w-full">
-        <ng-container *ngFor="let channel of videoChannels" >
-            <app-channel-button (click)="onClickChannelButton(channel.id)" [isSelected]="channel.id==selectedChannel.id" [channel]="channel"></app-channel-button>
-        </ng-container>
+          <div>
+            <mat-icon
+              aria-hidden="false"
+              aria-label="Example home icon"
+              fontIcon=""
+              >keyboard_arrow_down</mat-icon
+            >
+          </div>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          *ngIf="isDropdownOpen"
+          class="absolute bg-white border border-gray-200 rounded-lg shadow-lg mt-2 w-48 z-50"
+        >
+          <ul class="py-2">
+            <li>
+              <button
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                (click)="invitePeople()"
+              >
+                Invite People
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                (click)="serverSettings()"
+              >
+                Server Settings
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                (click)="manageMembers()"
+              >
+                Manage Members
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                (click)="createChannel()"
+              >
+                Create Channel
+              </button>
+            </li>
+            <li>
+              <button
+                class="w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+                (click)="deleteServer()"
+              >
+                Delete Server
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <app-create-channel-modal #modal></app-create-channel-modal>
+    <!-- text channel group -->
+    <div class="flex flex-row justify-between w-full">
+      <h3 class="text-gray-400">TEXT CHANNELS</h3>
+      <mat-icon (click)="modal.openModal()">add_circle</mat-icon>
+    </div>
+    <div class="font-medium w-full">
+      <ng-container *ngFor="let channel of textChannels">
+        <app-channel-button
+          (click)="onClickChannelButton(channel.id)"
+          (deleteChannel)="handleDeleteChannel($event)"
+          (updateChannelData)="handleUpdateChannel($event)"
+          [isSelected]="channel.id == selectedChannel.id"
+          [channel]="channel"
+        ></app-channel-button>
+      </ng-container>
+    </div>
+
+    <!-- Video Channel Group -->
+    <div class="flex flex-row justify-between text-gray-100 w-full">
+      <h3 class="text-gray-400">VIDEO CHANNELS</h3>
+      <mat-icon (click)="modal.openModal()">add_circle</mat-icon>
+    </div>
+
+    <div class="font-medium w-full">
+      <ng-container *ngFor="let channel of videoChannels">
+        <app-channel-button
+          (click)="onClickChannelButton(channel.id)"
+          (deleteChannel)="handleDeleteChannel($event)"
+          (updateChannelData)="handleUpdateChannel($event)"
+          [isSelected]="channel.id == selectedChannel.id"
+          [channel]="channel"
+        ></app-channel-button>
+      </ng-container>
+    </div>
+
+    <app-create-channel-modal (channelCreated)="onChannelCreate($event)" #modal></app-create-channel-modal>
+  </div>
+  <!-- Channel Content -->
+  <div class="w-full">
+    <app-content [channel]="selectedChannel"></app-content>
+  </div>
 </div>
