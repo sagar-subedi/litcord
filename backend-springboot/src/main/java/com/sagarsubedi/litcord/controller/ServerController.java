@@ -2,10 +2,13 @@ package com.sagarsubedi.litcord.controller;
 
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
+import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.ServerDTO;
+import com.sagarsubedi.litcord.model.Channel;
 import com.sagarsubedi.litcord.model.Server;
 import com.sagarsubedi.litcord.service.server.ServerService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,18 +31,25 @@ public class ServerController {
     @Autowired
     private ServerService serverService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @PostMapping
-    public ResponseEntity<String> createServer(@RequestBody ServerDTO server){
+    public ResponseEntity<ServerDTO> createServer(
+            @RequestParam("name") String name,
+            @RequestParam("userId") Long userId,
+            @RequestParam("dp") MultipartFile dp
+    ){
         try{
-            if(!server.getName().isBlank()) {
-                Server createdServer = serverService.createServer(server.getName(), server.getUserId());
-                return new ResponseEntity<>(createdServer.getId().toString(), HttpStatus.CREATED);
+// Add validation to ensure that a user can only add a server to only his account, i.e username fromm token should match with the uerId passed with request
+            if(!name.isBlank()) {
+                Server createdServer = serverService.createServer(name, userId, dp);
+                ServerDTO createdServerDTO = modelMapper.map(createdServer, ServerDTO.class);
+                return new ResponseEntity<>(createdServerDTO, HttpStatus.CREATED);
             }
             throw new Exception("Server name can't be blank");
-        }catch(ServerCreationConflictException e){
-            return new ResponseEntity<>("Server already present", HttpStatus.CONFLICT);
-    }catch(Exception e){
-            return new ResponseEntity<>("Something happened. Channel not created.", HttpStatus.CONFLICT);
+        } catch(Exception e){
+            return new ResponseEntity<>(new ServerDTO(), HttpStatus.CONFLICT);
         }
     }
 
@@ -68,12 +80,24 @@ public class ServerController {
     public ResponseEntity<String> deleteServer(@PathVariable Long id) {
         try {
             serverService.deleteServer(id);
-            return ResponseEntity.ok("Server deleted successfully.");
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (ServerNotFoundException e) {
             return new ResponseEntity<>("Server not found.", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Something went wrong. Server not deleted.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/user")
+    public List<ServerDTO> getServersForUser(@RequestParam Long userId) {
+            return serverService.getServersForUser(userId);
+    }
+
+    @PostMapping("/channels")
+    public ResponseEntity<ChannelDTO> addChannel(@RequestBody ChannelDTO channel) {
+        Channel channelEntity = serverService.addChannelToServer(channel);
+        ChannelDTO dto = modelMapper.map(channelEntity, ChannelDTO.class);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     // List all servers

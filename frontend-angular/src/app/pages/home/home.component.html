@@ -1,16 +1,4 @@
-<div id="parent" *ngIf="servers.length>0"  class="flex flex-row min-h-screen w-full">
-   
+<div id="parent"class="flex flex-row min-h-screen w-full">
    <!-- Servers/Channel List -->
-    <app-server (createServer)="openModal()" [servers]="servers"></app-server>
-
-    <!-- Channel Content -->
-     <div class="w-full">
-        <app-content [channel]="selectedChannel"></app-content>
-     </div>
-
-     <app-create-server-modal
-      [isVisible]="isModalVisible"
-      (close)="closeModal()"
-      (serverCreated)="onServerCreated($event)">
-      </app-create-server-modal>
+    <app-server class="w-full"></app-server>
 </div>

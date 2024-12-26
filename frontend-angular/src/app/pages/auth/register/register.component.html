@@ -1,0 +1,62 @@
+<div class="text-black flex justify-center items-center min-h-screen bg-gray-100">
+<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+  <h2 class="text text-2xl font-semibold text-center text-blue-600 mb-6">Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-4">
+      <label for="name" class="block text-black text-sm font-medium">Full Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        class="w-full px-4 py-2 text-black border rounded-md"
+        placeholder="Enter your full name"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="email" class="block text-black text-sm font-medium">Email/Username</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        class="w-full px-4 py-2 text-black border rounded-md"
+        placeholder="Enter your email"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="password" class="block text-black text-sm font-medium">Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        class="w-full px-4 py-2 text-black border rounded-md"
+        placeholder="Enter your password"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="confirmPassword" class="block text-black text-sm font-medium">Confirm Password</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        class="w-full text-black px-4 py-2 border rounded-md"
+        placeholder="Confirm your password"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-blue-600 text-white py-2 rounded-md shadow hover:bg-blue-700 transition"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Registering...' : 'Register' }}
+    </button>
+  </form>
+  <p class="mt-4 text-center text-sm text-gray-600">
+    Already have an account?
+    <a routerLink="/auth/login" class="text-blue-600 hover:underline">Login</a>
+  </p>
+</div>
+</div>

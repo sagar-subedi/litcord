@@ -1,6 +1,7 @@
 package com.sagarsubedi.litcord.controller;
 
 import com.sagarsubedi.litcord.Exceptions.ChannelCreationConflictException;
+import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.request.ChannelCreateDTO;
 import com.sagarsubedi.litcord.model.Channel;
 import com.sagarsubedi.litcord.service.channel.ChannelService;
@@ -26,9 +27,9 @@ public class ChannelController {
     private ChannelService channelService;
 
     @PostMapping
-    public ResponseEntity<String> createChannel(@RequestBody ChannelCreateDTO channel){
+    public ResponseEntity<String> createChannel(@RequestBody ChannelDTO channel){
         try{
-            Channel createdChannel = channelService.createChannel(channel.getName(), channel.getServerId(), channel.getProfileId());
+            Channel createdChannel = channelService.createChannel(channel.getName(), channel.getServerId(), channel.getAdminId(), channel.getType());
             return new ResponseEntity<>(createdChannel.getId().toString(), HttpStatus.CREATED);
         }catch(ChannelCreationConflictException e){
             return new ResponseEntity<>("Channel already present", HttpStatus.CONFLICT);

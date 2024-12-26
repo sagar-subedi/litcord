@@ -1,3 +1,55 @@
-<div [ngClass]="[isSelected?'bg-gray-400 hover:bg-gray-700':'hover:bg-gray-500', ' rounded-full','my-2', 'px-4']">
-    <button  class="text-left w-full p-[5px]">{{channel.name}}</button>
-</div>
+<div class="channel-item flex items-center justify-between p-2 border-b">
+    <div [ngClass]="[isSelected?'bg-gray-400 hover:bg-gray-700':'hover:bg-gray-500', ' rounded-full','my-2', 'px-4']">
+        <button  class="text-left w-full p-[5px]">{{channel.name}}</button>
+    </div>
+  
+    <!-- Action Buttons -->
+    <div class="channel-actions flex space-x-1">
+      <button
+        class="bg-red-500 text-white rounded hover:bg-red-600"
+        (click)="confirmDeleteChannel()"
+      >
+       <mat-icon>delete</mat-icon> 
+      </button>
+      <button
+        class="bg-blue-500 text-white rounded hover:bg-blue-600"
+        (click)="openEditForm()"
+      >
+       <mat-icon>edit_square</mat-icon> 
+      </button>
+    </div>
+  </div>
+  
+  <!-- Edit Form Modal -->
+  <div *ngIf="isEditFormVisible" class="modal-backdrop flex items-center justify-center">
+    <div class="modal bg-white p-4 rounded shadow-lg w-1/3">
+      <h2 class="text-black text-xl mb-4">Edit Channel</h2>
+      <form (ngSubmit)="updateChannel()">
+        <label class="text-black block mb-2">
+          Name:
+          <input
+            type="text"
+            [(ngModel)]="editChannelData.name"
+            name="name"
+            class="text-black border rounded p-1 w-full"
+          />
+        </label>
+        <div class="flex justify-end space-x-2">
+          <button
+            type="button"
+            class=" bg-gray-300 px-3 py-1 rounded hover:bg-gray-400"
+            (click)="closeEditForm()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class=" bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
