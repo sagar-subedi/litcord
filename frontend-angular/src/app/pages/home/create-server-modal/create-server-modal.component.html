@@ -5,6 +5,7 @@
   <div
     class="bg-white rounded-lg shadow-lg w-96 p-6 relative"
   >
+    <!-- Close Button -->
     <button
       class="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
       (click)="closeModal()"
@@ -12,9 +13,9 @@
       ✕
     </button>
 
-    <h2 class="text-black text-2xl font-semibold mb-4 text-center">Create New Server</h2>
-
     <form (ngSubmit)="createServer()" class="space-y-4">
+      <h3 class="text-black text-xl font-semibold mb-2">Create a New Server</h3>
+
       <!-- Server Image Field -->
       <div>
         <label
@@ -65,5 +66,46 @@
         Create Server
       </button>
     </form>
+
+    <!-- OR Separator -->
+    <div class="relative my-6">
+      <div class="border-t border-gray-300"></div>
+      <div
+        class="absolute top-[-12px] left-1/2 transform -translate-x-1/2 bg-white px-3 text-gray-600 font-medium"
+      >
+        OR
+      </div>
+    </div>
+
+    <!-- Join Existing Server Section -->
+    <form (ngSubmit)="joinServer()" class="space-y-4">
+      <h3 class="text-black text-xl font-semibold mb-2">Join an Existing Server</h3>
+
+      <!-- Invite Code Field -->
+      <div>
+        <label
+          for="inviteCode"
+          class="block text-gray-700 font-medium mb-2"
+        >Invite Code</label>
+        <input
+          type="text"
+          id="inviteCode"
+          [(ngModel)]="inviteCode"
+          name="inviteCode"
+          required
+          placeholder="Enter invite code"
+          class="text-black border border-gray-300 rounded-lg w-full px-4 py-2"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="bg-green-500 text-white rounded-lg px-6 py-2 w-full hover:bg-green-600"
+      >
+        Join Server
+      </button>
+    </form>
   </div>
 </div>
+

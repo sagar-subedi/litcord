@@ -16,6 +16,8 @@ export class CreateServerModalComponent {
   @Output() serverCreated = new EventEmitter<any>();
 
   serverName: string = '';
+
+  inviteCode: string = '';
   serverImage?: File;
   imagePreview: string | null = null; // For holding the preview image URL
 
@@ -49,5 +51,9 @@ export class CreateServerModalComponent {
           },
         });
     }
+  }
+
+  joinServer(): void {
+    console.log('Joining server with invite code:', this.inviteCode);
   }
 }
