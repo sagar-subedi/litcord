@@ -17,6 +17,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CreateChannelModalComponent } from '../create-channel-modal/create-channel-modal.component';
 import { ServerService } from '../../../services/server.service';
 import { ContentComponent } from '../content/content.component';
+import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-channel',
@@ -29,6 +31,7 @@ import { ContentComponent } from '../content/content.component';
     CommonModule,
     CreateChannelModalComponent,
     ContentComponent,
+    MatDialogModule
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -44,7 +47,8 @@ export class ChannelComponent implements OnInit, OnChanges {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -133,10 +137,13 @@ export class ChannelComponent implements OnInit, OnChanges {
     }
   }
 
-  // Handlers for each operation
-  invitePeople() {
-    console.log('Invite People clicked');
-    this.isDropdownOpen = false; // Close dropdown after action
+  openInviteDialog(): void {
+    const inviteCode = this.server.inviteCode; // Replace with your actual invite code logic
+    this.dialog.open(InviteDialogComponent, {
+      data: { inviteCode },
+      width: '400px',
+    });
+    this.isDropdownOpen = false;
   }
 
   serverSettings() {
