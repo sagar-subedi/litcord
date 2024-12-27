@@ -19,6 +19,8 @@ import { ServerService } from '../../../services/server.service';
 import { ContentComponent } from '../content/content.component';
 import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ServerSettingsModalComponent } from './server-settings-modal/server-settings-modal.component';
+import { ManageMembersModalComponent } from './manage-members-modal/manage-members-modal.component';
 
 @Component({
   selector: 'app-channel',
@@ -30,8 +32,10 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     ChannelButtonComponent,
     CommonModule,
     CreateChannelModalComponent,
+    ServerSettingsModalComponent,
+    ManageMembersModalComponent,
     ContentComponent,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -43,6 +47,15 @@ export class ChannelComponent implements OnInit, OnChanges {
   videoChannels: any[] = [];
   selectedChannel: any;
   isDropdownOpen: boolean = false;
+  isSettingsModalVisible = false;
+
+  members = [
+    { id: 1, name: 'Alice' },
+    { id: 2, name: 'Bob' },
+    { id: 3, name: 'Charlie' },
+  ]; // Example members
+  isAdmin = true; // Example: current user is admin
+  isManageMembersModalVisible = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -164,5 +177,32 @@ export class ChannelComponent implements OnInit, OnChanges {
   deleteServer() {
     this.serverDelete.emit(this.server.id);
     this.isDropdownOpen = false;
+  }
+
+  openServerSettings(server: { id: number; name: string }) {
+    // this.server = { ...server }; // Clone server object to avoid direct mutation
+    this.isSettingsModalVisible = true;
+    this.isDropdownOpen = false;
+  }
+
+  saveServerSettings($event : any) {
+    // Update the server on save
+    this.server = $event; 
+    this.isSettingsModalVisible = false;
+    this.isDropdownOpen = false;
+  }
+
+  openManageMembersDialog() {
+    this.isManageMembersModalVisible = true;
+    this.isDropdownOpen = false;
+  }
+
+  closeManageMembersDialog() {
+    this.isManageMembersModalVisible = false;
+  }
+
+  handleRemoveMember($event: any) {
+    this.members = this.members.filter((member) => member.id !== $event);
+    alert(`Member with ID ${$event} removed.`);
   }
 }

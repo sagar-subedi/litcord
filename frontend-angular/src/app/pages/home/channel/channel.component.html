@@ -31,16 +31,16 @@
           <ul class="py-2">
             <li>
               <button
-              class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-              (click)="openInviteDialog()"
-            >
-              Invite People
-            </button>
+                class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                (click)="openInviteDialog()"
+              >
+                Invite People
+              </button>
             </li>
             <li>
               <button
                 class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                (click)="serverSettings()"
+                (click)="openServerSettings(server)"
               >
                 Server Settings
               </button>
@@ -48,7 +48,7 @@
             <li>
               <button
                 class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                (click)="manageMembers()"
+                (click)="openManageMembersDialog()"
               >
                 Manage Members
               </button>
@@ -109,7 +109,25 @@
       </ng-container>
     </div>
 
-    <app-create-channel-modal (channelCreated)="onChannelCreate($event)" #modal></app-create-channel-modal>
+    <app-create-channel-modal
+      (channelCreated)="onChannelCreate($event)"
+      #modal
+    ></app-create-channel-modal>
+    <!-- Server Settings Modal -->
+    <app-server-settings-modal
+      *ngIf="isSettingsModalVisible"
+      [server]="server"
+      (save)="saveServerSettings($event)"
+      (close)="isSettingsModalVisible = false"
+    ></app-server-settings-modal>
+    <!-- Manage Members Modal -->
+    <app-manage-members-modal
+      *ngIf="isManageMembersModalVisible"
+      [members]="members"
+      [isAdmin]="isAdmin"
+      (removeMember)="handleRemoveMember($event)"
+      (close)="closeManageMembersDialog()"
+    ></app-manage-members-modal>
   </div>
   <!-- Channel Content -->
   <div class="w-full">
