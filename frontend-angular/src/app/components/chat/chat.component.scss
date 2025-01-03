@@ -2,13 +2,6 @@
   font-family: "Arial", sans-serif;
 }
 
-.chat-area {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  overflow-y: auto;
-  scrollbar-width: thin;
-}
 
 .chat-area::-webkit-scrollbar {
   width: 5px;
@@ -28,13 +21,11 @@
 
 .message-bubble.sent {
   background-color: #3a3df5;
-  align-self: flex-end;
   text-align: right;
 }
 
 .message-bubble.received {
   background-color: #37becf;
-  align-self: flex-start;
   text-align: left;
 }
 

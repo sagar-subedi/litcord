@@ -26,6 +26,16 @@ export class ChatComponent implements OnInit {
     this.messages = [
       { sender: 'user1', text: 'Hi there!' },
       { sender: 'user2', text: 'Hello! How can I help you?' },
+      { sender: 'user1', text: 'Hi there!' },
+      { sender: 'user2', text: 'Hello! How can I help you?' }, 
+      { sender: 'user1', text: 'Hi there!' },
+      { sender: 'user2', text: 'Hello! How can I help you?' },
+      { sender: 'user1', text: 'Hi there!' },
+      { sender: 'user2', text: 'Hello! How can I help you?' }, 
+      { sender: 'user1', text: 'Hi there!' },
+      { sender: 'user2', text: 'Hello! How can I help you?' }, 
+      { sender: 'user1', text: 'Hi there!' },
+      { sender: 'user2', text: 'Hello! How can I help you?' },
     ];
   }
 

@@ -1,6 +1,6 @@
 <div
   id="content-col"
-  class="flex flex-col justify-start min-w-[30rem] w-full h-full flex-grow bg-gray-500 p-5 pb-0"
+  class="flex flex-col justify-between min-w-[30rem] w-full h-full flex-grow bg-gray-500 p-5 pb-0"
 >
   <div
     class="flex items-center p-4 bg-gray-800 text-white shadow-md rounded-lg mb-3"
@@ -26,5 +26,7 @@
   >
     <app-video-call [channel]="channel"></app-video-call>
   </div>
- <app-chat *ngIf="channel.type === 'TEXT'"></app-chat>
+  <div class="h-full flex flex-col justify-end">
+    <app-chat class="h-full" *ngIf="channel.type === 'TEXT'"></app-chat>
+  </div>
 </div>
