@@ -1,4 +1,4 @@
-package com.sagarsubedi.litcord.service.auth;
+package com.sagarsubedi.litcord.service;
 
 import com.sagarsubedi.litcord.Exceptions.AccountCreationConflictException;
 import com.sagarsubedi.litcord.config.JwtService;

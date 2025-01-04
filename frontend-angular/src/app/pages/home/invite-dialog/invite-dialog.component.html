@@ -1,0 +1,29 @@
+<div class="invite-dialog bg-gray-900 p-6 rounded shadow-lg w-full text-white relative">
+    <!-- Close Button (Cross Icon) -->
+    <button
+      class="absolute top-2 right-4 text-gray-400 hover:text-white text-3xl"
+      (click)="closeDialog()"
+    >
+      &times;
+    </button>
+  
+    <!-- Dialog Header -->
+    <h2 class="text-white text-2xl font-bold mb-4 text-center">Invite People</h2>
+    <p class="text-gray-300 mb-4 text-center">
+      Share this invite code to let others join your server.
+    </p>
+  
+    <!-- Invite Code Display -->
+    <div
+      class="invite-code bg-gray-800 p-3 rounded flex justify-between items-center"
+    >
+      <span class="text-gray-300 font-mono">{{ inviteCode }}</span>
+      <button
+        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+        (click)="copyToClipboard()"
+      >
+        Copy
+      </button>
+    </div>
+  </div>
+  

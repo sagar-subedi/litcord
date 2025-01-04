@@ -3,7 +3,7 @@ package com.sagarsubedi.litcord.controller;
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.dto.AccountDTO;
 import com.sagarsubedi.litcord.model.Account;
-import com.sagarsubedi.litcord.service.account.AccountService;
+import com.sagarsubedi.litcord.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

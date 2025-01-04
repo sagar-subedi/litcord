@@ -1,5 +1,41 @@
-<div>
-    <mat-form-field class="w-full">
-      <input matInput placeholder="Type your message" />
-    </mat-form-field>
+<div class="flex flex-col justify-end chat-box-container bg-gray-400 rounded-lg shadow-lg p-4 w-full h-full mx-auto">
+  <!-- Chat Area -->
+  <div
+    class="chat-area rounded-lg chatbox max-h-[45rem] p-4 overflow-y-auto border"
+    (scroll)="onScroll($event)"
+  >
+    <!-- Loading Older Messages -->
+    <div *ngIf="isLoading" class="text-center text-gray-500 mb-4">
+      Loading...
+    </div>
+
+    <!-- Messages -->
+    <div *ngFor="let message of messages" [class]="message.sender === currentUser ? 'justify-end':'justify-start'" class="mb-2 w-full flex flex-row">
+      <div
+        [class]="
+          message.sender === currentUser
+            ? 'message-bubble sent'
+            : 'message-bubble received'
+        "
+      >
+        {{ message.text }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area mt-4 flex items-center gap-2">
+    <input
+      type="text"
+      [(ngModel)]="messageInput"
+      placeholder="Type a message..."
+      class="text-black flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none"
+    />
+    <button
+      class="send-button bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+      (click)="sendMessage()"
+    >
+      Send
+    </button>
+  </div>
 </div>

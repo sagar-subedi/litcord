@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ServerService } from '../../../services/server.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   standalone: true,
@@ -13,13 +14,15 @@ import { ServerService } from '../../../services/server.service';
 export class CreateServerModalComponent {
   @Input() isVisible = false; // Controls visibility of the modal
   @Output() close = new EventEmitter<void>();
-  @Output() serverCreated = new EventEmitter<any>();
+  @Output() serverCreatedOrJoined = new EventEmitter<any>();
 
   serverName: string = '';
+
+  inviteCode: string = '';
   serverImage?: File;
   imagePreview: string | null = null; // For holding the preview image URL
 
-  constructor(private serverService: ServerService) {}
+  constructor(private serverService: ServerService, private authService: AuthService) {}
   closeModal() {
     this.close.emit();
   }
@@ -44,10 +47,26 @@ export class CreateServerModalComponent {
         .createServer(this.serverName, 1, this.serverImage)
         .subscribe({
           next: (data) => {
-            this.serverCreated.emit(data);
+            this.serverCreatedOrJoined.emit(data);
             this.closeModal();
           },
         });
     }
+  }
+
+  joinServer(): void {
+    // let userId = this.authService.getCurrentUser().id;
+    let userId = this.authService.getCurrentUserId();
+    if(!userId){
+      return;
+    }
+    this.serverService.joinServer(this.inviteCode, userId).subscribe({
+      next: (server) => {
+        console.log('Joined server:', server );
+        this.serverCreatedOrJoined.emit(server)
+        this.closeModal();
+      },
+      error: (err) => console.error('Error joining server:', err),
+    });
   }
 }

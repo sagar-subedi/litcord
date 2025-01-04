@@ -29,6 +29,7 @@ public class JwtService {
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         return Jwts.builder().subject((userPrincipal.getEmail()))
+                .claim("userId", userPrincipal.getId())
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpiration)).signWith(getSignInKey(), Jwts.SIG.HS256).compact();
     }

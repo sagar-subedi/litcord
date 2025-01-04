@@ -17,6 +17,12 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { CreateChannelModalComponent } from '../create-channel-modal/create-channel-modal.component';
 import { ServerService } from '../../../services/server.service';
 import { ContentComponent } from '../content/content.component';
+import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ServerSettingsModalComponent } from './server-settings-modal/server-settings-modal.component';
+import { ManageMembersModalComponent } from './manage-members-modal/manage-members-modal.component';
+import { Membership } from '../../../types/Membership';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-channel',
@@ -28,7 +34,10 @@ import { ContentComponent } from '../content/content.component';
     ChannelButtonComponent,
     CommonModule,
     CreateChannelModalComponent,
+    ServerSettingsModalComponent,
+    ManageMembersModalComponent,
     ContentComponent,
+    MatDialogModule,
   ],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.scss',
@@ -36,15 +45,23 @@ import { ContentComponent } from '../content/content.component';
 export class ChannelComponent implements OnInit, OnChanges {
   @Input() server!: any;
   @Output() serverDelete = new EventEmitter<any>();
+  @Output() serverLeave = new EventEmitter<any>();
   textChannels: any[] = [];
   videoChannels: any[] = [];
   selectedChannel: any;
   isDropdownOpen: boolean = false;
+  isSettingsModalVisible = false;
+
+  members: Membership[] = []; // Example members
+  isAdmin = false; // Example: current user is admin
+  isManageMembersModalVisible = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private dialog: MatDialog,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +84,22 @@ export class ChannelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.populateTextAndVideoChannels();
     this.setSelectedChannel(this.route.snapshot.params);
+
+    //resetting isAdmin flag for newer server, only set to true, if current user is admin of the newly selected server
+    this.isAdmin = false;
+    //poi - this part may be optimized later, seems little redundant to fetch entire members, just to see if the current
+    //user is an ADMIN or not.
+    this.serverService.getMembersByServer(this.server.id).subscribe({
+      next: (members) => {
+        let userId = this.authService.getCurrentUserId();
+        this.members = members;
+        this.members.forEach((member) => {
+          if (member.userId.toString() == userId && member.type == 'ADMIN') {
+            this.isAdmin = true;
+          }
+        });
+      },
+    });
   }
 
   populateTextAndVideoChannels() {
@@ -133,10 +166,13 @@ export class ChannelComponent implements OnInit, OnChanges {
     }
   }
 
-  // Handlers for each operation
-  invitePeople() {
-    console.log('Invite People clicked');
-    this.isDropdownOpen = false; // Close dropdown after action
+  openInviteDialog(): void {
+    const inviteCode = this.server.inviteCode; // Replace with your actual invite code logic
+    this.dialog.open(InviteDialogComponent, {
+      data: { inviteCode },
+      width: '400px',
+    });
+    this.isDropdownOpen = false;
   }
 
   serverSettings() {
@@ -157,5 +193,44 @@ export class ChannelComponent implements OnInit, OnChanges {
   deleteServer() {
     this.serverDelete.emit(this.server.id);
     this.isDropdownOpen = false;
+  }
+
+  leaveServer() {
+    this.serverLeave.emit(this.server.id);
+    this.isDropdownOpen = false;
+  }
+
+  openServerSettings(server: { id: number; name: string }) {
+    // this.server = { ...server }; // Clone server object to avoid direct mutation
+    this.isSettingsModalVisible = true;
+    this.isDropdownOpen = false;
+  }
+
+  saveServerSettings($event: any) {
+    // Update the server on save
+    this.server = $event;
+    this.isSettingsModalVisible = false;
+    this.isDropdownOpen = false;
+  }
+
+  openManageMembersDialog() {
+    this.serverService.getMembersByServer(this.server.id).subscribe({
+      next: (members) => {
+        this.members = members;
+        this.isManageMembersModalVisible = true;
+        this.isDropdownOpen = false;
+      },
+    });
+  }
+
+  closeManageMembersDialog() {
+    this.isManageMembersModalVisible = false;
+  }
+
+  handleRemoveMember($event: any) {
+    this.members = this.members.filter(
+      (member) => member.membershipId !== $event
+    );
+    alert(`Member with ID ${$event} removed.`);
   }
 }
