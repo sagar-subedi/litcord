@@ -9,7 +9,7 @@ import { Membership } from '../types/Membership';
 })
 export class ServerService {
 //   apiUrl: string = 'https://localhost:8081';
-  apiUrl: string = 'https://litcord-api.sagar88.com.np/server';
+  apiUrl: string = 'https://litcord-api.sagar88.com.np';
 
   constructor(private http: HttpClient, private auth: AuthService) {
 
