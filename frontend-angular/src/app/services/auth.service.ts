@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
+import { AuthUtils } from '../utils/auth-utils';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -35,6 +36,24 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem(this.tokenKey);
   }
+
+  getCurrentUserEmail(){
+    let token = this.getToken()
+    if(token) {
+      return AuthUtils.extractEmailFromToken(token);
+    }
+    return null;
+  }
+
+  getCurrentUserId(){
+    let token = this.getToken()
+    if(token) {
+      return AuthUtils.extractUserIdFromToken(token);
+    }
+    return null;
+  }
+
+
 
   private isTokenExpired(token: string): boolean {
     const payload = JSON.parse(atob(token.split('.')[1]));
