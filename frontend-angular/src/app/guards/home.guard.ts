@@ -1,21 +1,30 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServerService } from '../services/server.service';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HomeGuard implements CanActivate {
-  constructor(private serverService: ServerService, private router: Router) {}
+  constructor(private serverService: ServerService, private router: Router, private authService: AuthService) {}
 
   canActivate(): Observable<boolean> {
     // Make the API call
 
-    //make the current user dynamic, populated through token or other means
-    let currentUserId = '1';
-    return this.serverService.getServerDetailsForUser(currentUserId).pipe(
+
+    let userId = this.authService.getCurrentUserId();
+
+    if (!userId) {
+      // Handle the case where email is null or undefined
+      console.error('User email is not available');
+      this.router.navigate(['/auth/login'])
+      return of(false); // Return an Observable to prevent further execution
+    }
+
+    return this.serverService.getServerDetailsForUser(userId).pipe(
       map((response: any) => {
         // Assuming the response contains the server and channel IDs
         console.log(response);

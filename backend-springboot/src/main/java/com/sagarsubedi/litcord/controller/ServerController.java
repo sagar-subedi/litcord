@@ -1,12 +1,11 @@
 package com.sagarsubedi.litcord.controller;
 
-import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
 import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.ServerDTO;
 import com.sagarsubedi.litcord.model.Channel;
 import com.sagarsubedi.litcord.model.Server;
-import com.sagarsubedi.litcord.service.server.ServerService;
+import com.sagarsubedi.litcord.service.ServerService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,8 +88,14 @@ public class ServerController {
     }
 
     @GetMapping("/user")
-    public List<ServerDTO> getServersForUser(@RequestParam Long userId) {
+    public List<ServerDTO> getServersForUserByUserId(@RequestParam Long userId) {
             return serverService.getServersForUser(userId);
+    }
+
+    @GetMapping("/from-email/{email}")
+    public ResponseEntity<List<ServerDTO>> getServersByEmail(@PathVariable String email) {
+        List<ServerDTO> servers = serverService.getServersByEmail(email);
+        return ResponseEntity.ok(servers);
     }
 
     @PostMapping("/channels")

@@ -4,7 +4,7 @@ import com.sagarsubedi.litcord.Exceptions.AccountCreationConflictException;
 import com.sagarsubedi.litcord.dto.LoginDTO;
 import com.sagarsubedi.litcord.dto.AccountDTO;
 import com.sagarsubedi.litcord.model.Account;
-import com.sagarsubedi.litcord.service.auth.AuthService;
+import com.sagarsubedi.litcord.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -6,6 +6,7 @@ import { AccountModalComponent } from '../account-modal/account-modal.component'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServerService } from '../../../services/server.service';
 import { CreateServerModalComponent } from '../create-server-modal/create-server-modal.component';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-server',
@@ -20,14 +21,22 @@ export class ServerComponent implements OnInit {
   selectedServer: any;
   isProfileModalOpen = false;
   isCreateServerModalOpen = false;
-  currentUserId = '1'
 
-  constructor(private router: Router, private serverService: ServerService, private route: ActivatedRoute){
+  constructor(private router: Router, private serverService: ServerService, private route: ActivatedRoute, private authService: AuthService
+    
+  ){
 
   }
   ngOnInit(): void {
     //initialize the data on first load of the component
-      this.serverService.getServerDetailsForUser(this.currentUserId).subscribe(
+      let userId= this.authService.getCurrentUserId();
+
+      if (!userId) {
+        // Handle the case where email is null or undefined
+        this.router.navigate(['/auth/login'])
+        return;
+      }
+      this.serverService.getServerDetailsForUser(userId).subscribe(
         {
           next: (data:any)=>{
             this.servers = data;
@@ -98,12 +107,30 @@ export class ServerComponent implements OnInit {
         next: (data)=>{
           this.servers = this.servers.filter((server)=> server.id !==id)
           this.selectedServer = this.servers[0]
+          this.navigateToSelectedServer();
         }
       }
     ) 
   }
 
-  onServerCreated($event:any){
+
+  onLeaveServer(id:number){
+    if(this.servers.length == 1){
+      alert("This is your only server. You can't leave it.")
+      return;
+    }
+    this.serverService.deleteMember(id, this.authService.getCurrentUserId()!).subscribe(
+      {
+        next: (data)=>{
+          this.servers = this.servers.filter((server)=> server.id !==id)
+          this.selectedServer = this.servers[0]
+          this.navigateToSelectedServer();
+        }
+      }
+    ) 
+  }
+
+  onServerCreatedOrJoined($event:any){
     this.servers.push($event)
   }
 
@@ -113,5 +140,9 @@ export class ServerComponent implements OnInit {
 
   closeProfileModal() {
     this.isProfileModalOpen = false;
+  }
+
+  navigateToSelectedServer(){
+    this.router.navigate([`/servers/${this.selectedServer.id}/channels/${this.selectedServer.channels[0].id}`])
   }
 }

@@ -1,4 +1,4 @@
-package com.sagarsubedi.litcord.service.channel;
+package com.sagarsubedi.litcord.service;
 
 import com.sagarsubedi.litcord.Exceptions.ChannelCreationConflictException;
 import com.sagarsubedi.litcord.dao.ChannelRepository;
