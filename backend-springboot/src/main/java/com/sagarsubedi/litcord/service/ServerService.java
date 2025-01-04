@@ -1,14 +1,18 @@
-package com.sagarsubedi.litcord.service.server;
+package com.sagarsubedi.litcord.service;
 
 import com.sagarsubedi.litcord.Exceptions.ServerCreationConflictException;
 import com.sagarsubedi.litcord.Exceptions.ServerNotFoundException;
+import com.sagarsubedi.litcord.dao.AccountRepository;
 import com.sagarsubedi.litcord.dao.ChannelRepository;
 import com.sagarsubedi.litcord.dao.MembershipRepository;
 import com.sagarsubedi.litcord.dao.ServerRepository;
 import com.sagarsubedi.litcord.dto.ChannelDTO;
 import com.sagarsubedi.litcord.dto.ServerDTO;
 import com.sagarsubedi.litcord.enums.ChannelType;
+import com.sagarsubedi.litcord.enums.MembershipType;
+import com.sagarsubedi.litcord.model.Account;
 import com.sagarsubedi.litcord.model.Channel;
+import com.sagarsubedi.litcord.model.Membership;
 import com.sagarsubedi.litcord.model.Server;
 import com.sagarsubedi.litcord.utils.StringUtils;
 import jakarta.transaction.Transactional;
@@ -47,6 +51,9 @@ public class ServerService {
 
     @Autowired
     MembershipRepository membershipRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -91,6 +98,9 @@ public class ServerService {
         newServer.setUserId(userId);
         Server createdServer = serverRepository.save(newServer);
         Channel defaultChannel = channelRepository.save(new Channel("General",createdServer.getUserId(),createdServer,ChannelType.TEXT));
+
+        //Return Membership object not used for now
+        membershipRepository.save(new Membership(createdServer.getId(), createdServer.getUserId(), MembershipType.ADMIN));
         createdServer.getChannels().add(defaultChannel);
         createdServer.setDpUrl(getServerImageUrl(createdServer.getUserId(), createdServer.getId(), StringUtils.extractFileName(createdServer.getDpUrl())));
         return createdServer;
@@ -181,6 +191,38 @@ public class ServerService {
                 .collect(Collectors.toList());
     }
 
+    public List<ServerDTO> getServersByEmail(String email) {
+        // Fetch the userId based on the username
+        Account account = accountRepository.findAccountByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Long userId = account.getId();
+
+        // Get all memberships for the user
+        List<Membership> memberships = membershipRepository.findByUserId(userId);
+
+        // Fetch and return the servers corresponding to those memberships
+        List<Server> servers =  memberships.stream()
+                .map(membership -> serverRepository.findById(membership.getServerId())
+                        .orElseThrow(() -> new IllegalArgumentException("Server not found")))
+                .collect(Collectors.toList());
+
+        // Convert to DTO
+
+        //todo:extract this method to convert server to serverDTO
+        return servers.stream()
+                .map(server -> new ServerDTO(
+                        server.getId(),
+                        server.getName(),
+                        server.getInviteCode(),
+                        server.getUserId(),
+                        getServerImageUrl(server.getUserId(), server.getId(), StringUtils.extractFileName(server.getDpUrl())),
+                        server.getChannels().stream().map(
+                                channel -> modelMapper.map(channel, ChannelDTO.class)).collect(Collectors.toList()
+                        )))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public Channel addChannelToServer(ChannelDTO channel) {
         Server server = serverRepository.findById(channel.getServerId())
@@ -214,7 +256,6 @@ public class ServerService {
 
     public boolean isUserAuthorized(Long userId, Long serverId) {
         // to check whether a user is authorized to access a server, should either be a member or the admin
-        // todo: insert the admin in the members table after role are introduced. That will simplify the query
-        return membershipRepository.existsByUserIdAndServerId(userId, serverId) || serverRepository.existsByIdAndUserId(serverId, userId);
+        return membershipRepository.existsByServerIdAndUserId(serverId, userId);
     }
 }
