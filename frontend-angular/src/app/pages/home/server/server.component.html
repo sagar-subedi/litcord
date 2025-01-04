@@ -20,12 +20,12 @@
             <mat-icon class="text-5xl h-10" (click)="openProfileModal()">account_circle_outlined</mat-icon>
         </div>
     </div>
-    <app-channel class="w-full" (serverDelete)="onDeleteServer($event)" [server]="selectedServer"></app-channel>
+    <app-channel class="w-full" (serverLeave)="onLeaveServer($event)" (serverDelete)="onDeleteServer($event)" [server]="selectedServer"></app-channel>
 </div>
 <app-account-modal *ngIf="isProfileModalOpen" (close)="closeProfileModal()"></app-account-modal>
 
 <app-create-server-modal
 [isVisible]="isCreateServerModalOpen"
 (close)="closeModal()"
-(serverCreated)="onServerCreated($event)">
+(serverCreatedOrJoined)="onServerCreatedOrJoined($event)">
 </app-create-server-modal>
