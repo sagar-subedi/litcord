@@ -1,10 +1,12 @@
 package com.sagarsubedi.litcord.model;
 
+import com.sagarsubedi.litcord.enums.MembershipType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -19,8 +21,11 @@ public class Membership {
 
     private Long userId;
 
-    public Membership(Long serverId, Long userId){
+    private MembershipType type;
+
+    public Membership(Long serverId, Long userId, MembershipType type){
         this.serverId = serverId;
         this.userId = userId;
+        this.type  = type;
     }
 }
