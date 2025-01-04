@@ -27,6 +27,6 @@
     <app-video-call [channel]="channel"></app-video-call>
   </div>
   <div class="h-full flex flex-col justify-end">
-    <app-chat class="h-full" *ngIf="channel.type === 'TEXT'"></app-chat>
+    <app-chat [channel]="channel" class="h-full" *ngIf="channel.type === 'TEXT'"></app-chat>
   </div>
 </div>
