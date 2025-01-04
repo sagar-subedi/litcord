@@ -20,14 +20,33 @@
         *ngFor="let member of members"
         class="flex justify-between items-center border-b pb-2"
       >
-        <span class="text-gray-800">{{ member.name }}</span>
+        <span class="text-gray-800">{{ member.userId }}</span>
+        <span class="text-gray-800">{{ member.email }}</span>
         <button
-          *ngIf="isAdmin"
+          *ngIf="
+            isAdmin &&
+            member.type !== 'ADMIN' &&
+            currentUserId != member.userId.toString()
+          "
           class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-          (click)="deleteMember(member.id)"
+          (click)="deleteMember(member)"
         >
           Remove
         </button>
+        <div *ngIf="member.type == 'ADMIN' || currentUserId == member.userId.toString()" class="flex gap-1">
+          <span
+            *ngIf="currentUserId == member.userId.toString()"
+            class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full"
+          >
+            You
+          </span>
+          <span
+            *ngIf="member.type == 'ADMIN'"
+            class="bg-blue-500 text-white text-xs font-semibold px-2 py-1 rounded-full"
+          >
+            Admin
+          </span>
+        </div>
       </div>
     </div>
 

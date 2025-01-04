@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../../services/auth.service';
+import { Membership } from '../../../../types/Membership';
 
 @Component({
   selector: 'app-manage-members-modal',
@@ -9,19 +11,28 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './manage-members-modal.component.html',
   styleUrl: './manage-members-modal.component.scss'
 })
-export class ManageMembersModalComponent {
-  @Input() members: { id: number; name: string }[] = []; // List of members
-  @Input() isAdmin: boolean = false; // Whether the current user is an admin
+export class ManageMembersModalComponent implements OnInit{
+  @Input() members: Membership[] = []; // List of members
+  @Input() isAdmin: boolean = false;
   @Output() removeMember = new EventEmitter<number>(); // Emit member ID to delete
   @Output() close = new EventEmitter<void>(); // Close the dialog
 
+  currentUserId : string | null = null; 
+  
+  constructor(private authService: AuthService){
+    
+  }
+
+  ngOnInit(): void {
+      this.currentUserId = this.authService.getCurrentUserId();
+  }
   closeModal() {
     this.close.emit();
   }
 
-  deleteMember(memberId: number) {
+  deleteMember(membership: Membership) {
     if (confirm('Are you sure you want to remove this member?')) {
-      this.removeMember.emit(memberId);
+      this.removeMember.emit(membership.membershipId);
     }
   }
 }
