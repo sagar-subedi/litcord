@@ -1,35 +1,40 @@
 package com.sagarsubedi.litcord.model;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_seq")
-    Long messageId;
+    Long id;
 
-    String message;
+    String content;
 
-    String memberId;
+    Long senderId;
 
-    String channelId;
+    Long channelId;
 
-    // Todo: Add new fields for message sent date, deleted status, updatedAt, fileUrl, etc, iteratively (not everytfield needed to be added at once)
+    String senderEmail;
+
+    private LocalDateTime sentAt;
+
+    // Todo: Add new fields for message sent date, deleted status, updatedAt, fileUrl, etc, iteratively (not every field needed to be added at once)
     public Message(){
-        this.message = "Default Message";
-        this.memberId = "Default Member";
+        this.content = "Default Message";
     }
 
-    public Message(String message, String memberId, String channelId){
-        this.message = message;
-        this.memberId = memberId;
+    public Message(String message, Long senderId, String senderEmail, Long channelId, LocalDateTime sentAt){
+        this.content = message;
+        this.senderId = senderId;
         this.channelId = channelId;
+        this.senderEmail = senderEmail;
+        this.sentAt = sentAt;
     }
 }

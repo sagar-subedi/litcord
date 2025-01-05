@@ -1,6 +1,7 @@
 <div class="flex flex-col justify-end chat-box-container bg-gray-400 rounded-lg shadow-lg p-4 w-full h-full mx-auto">
   <!-- Chat Area -->
   <div
+    #chatContainer
     class="chat-area rounded-lg chatbox max-h-[45rem] p-4 overflow-y-auto border"
     (scroll)="onScroll($event)"
   >
@@ -10,17 +11,49 @@
     </div>
 
     <!-- Messages -->
-    <div *ngFor="let message of messages" [class]="message.sender === currentUser ? 'justify-end':'justify-start'" class="mb-2 w-full flex flex-row">
-      <div
+<!-- Messages -->
+<div
+  *ngFor="let message of messages"
+  [class]="message.senderId === currentUser ? 'justify-end' : 'justify-start'"
+  class="mb-4 w-full flex flex-row"
+>
+  <!-- Message container -->
+  <div class="flex items-start space-x-4">
+    <!-- User Avatar -->
+    <div
+      class="flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center text-white"
+      [class]="
+        message.senderId === currentUser ? 'bg-blue-500' : 'bg-green-500'
+      "
+    >
+      {{ message.senderEmail.charAt(0).toUpperCase() }}
+    </div>
+
+    <!-- Message Content -->
+    <div>
+      <!-- Sender Email -->
+      <p class="text-sm text-gray-200 font-medium">
+        {{ message.senderEmail }}
+      </p>
+      <!-- Message Bubble -->
+      <p
+        class="text-sm px-3 py-2 rounded-md mt-1"
         [class]="
-          message.sender === currentUser
-            ? 'message-bubble sent'
-            : 'message-bubble received'
+          message.senderId === currentUser
+            ? 'bg-blue-100 text-blue-700'
+            : 'bg-green-100 text-green-700'
         "
       >
-        {{ message.text }}
-      </div>
+        {{ message.content }}
+      </p>
+      <!-- Timestamp -->
+      <p class="text-xs text-gray-300 mt-1">
+        {{ message.sentAt | date: 'shortTime' }}
+      </p>
     </div>
+  </div>
+</div>
+
   </div>
 
   <!-- Input Area -->
@@ -28,6 +61,7 @@
     <input
       type="text"
       [(ngModel)]="messageInput"
+      (keydown.enter)="sendMessage()"
       placeholder="Type a message..."
       class="text-black flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none"
     />

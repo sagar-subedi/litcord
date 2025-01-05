@@ -16,8 +16,9 @@ export class HomeGuard implements CanActivate {
 
 
     let userId = this.authService.getCurrentUserId();
+    let isLoggedIn = this.authService.isLoggedIn();
 
-    if (!userId) {
+    if (!userId || !isLoggedIn) {
       // Handle the case where email is null or undefined
       console.error('User email is not available');
       this.router.navigate(['/auth/login'])
@@ -28,6 +29,9 @@ export class HomeGuard implements CanActivate {
       map((response: any) => {
         // Assuming the response contains the server and channel IDs
         console.log(response);
+        if(response.length==0){
+          this.router.navigate([`/servers/new`])
+        }
         const serverId = response[0].id;
         const channelId = response[0].channels[0].id;
 
