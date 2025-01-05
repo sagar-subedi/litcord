@@ -43,8 +43,9 @@ export class CreateServerModalComponent {
 
   createServer() {
     if (this.serverName && this.serverImage) {
+      let userId = parseInt(this.authService.getCurrentUserId()!)
       this.serverService
-        .createServer(this.serverName, 1, this.serverImage)
+        .createServer(this.serverName, userId, this.serverImage)
         .subscribe({
           next: (data) => {
             this.serverCreatedOrJoined.emit(data);

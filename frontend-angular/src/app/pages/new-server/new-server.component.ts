@@ -35,9 +35,11 @@ export class NewServerComponent {
   }
 
   createServer() {
+    let userId = parseInt(this.authService.getCurrentUserId()!);
+
     if (this.serverName && this.serverImage) {
       this.serverService
-        .createServer(this.serverName, 1, this.serverImage)
+        .createServer(this.serverName, userId, this.serverImage)
         .subscribe({
           next: (data) => {
             this.routerService.navigate(['/servers'])

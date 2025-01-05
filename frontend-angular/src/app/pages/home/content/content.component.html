@@ -24,7 +24,15 @@
     *ngIf="channel.type === 'VIDEO'"
     class="h-full"
   >
-    <app-video-call class="h-full" [channel]="channel"></app-video-call>
+    <app-video-call (callEnd)="endCall()" *ngIf="isInCall" class="h-full" [channel]="channel"></app-video-call>
+    <div *ngIf="!isInCall" class="flex justify-center items-center h-screen">
+      <button
+        class="bg-gray-800 text-gray-200 px-6 py-3 rounded-full shadow-lg text-xl font-bold transform transition-transform duration-300 hover:scale-105 hover:bg-gray-700 hover:text-white hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-gray-600"
+        (click)="startCall()"
+      >
+        📞 Join Call
+      </button>
+    </div>    
   </div>
   <div class="h-full flex flex-col justify-end" *ngIf="channel.type === 'TEXT'">
     <app-chat [channel]="channel" class="h-full"></app-chat>

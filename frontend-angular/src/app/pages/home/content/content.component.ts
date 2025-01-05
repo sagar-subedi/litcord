@@ -13,5 +13,14 @@ import { ChatComponent } from '../../../components/chat/chat.component';
 })
 export class ContentComponent {
   @Input() channel!:any;
+  isInCall: boolean = false;
+
+  startCall(){
+    this.isInCall = true;
+  }
+
+  endCall(){
+    this.isInCall = false;
+  }
 
 }

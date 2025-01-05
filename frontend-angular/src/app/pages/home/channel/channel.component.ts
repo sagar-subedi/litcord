@@ -8,8 +8,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { MatFormField } from '@angular/material/form-field';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ChannelButtonComponent } from './channel-button/channel-button.component';
 import { CommonModule } from '@angular/common';
@@ -28,7 +27,6 @@ import { AuthService } from '../../../services/auth.service';
   selector: 'app-channel',
   standalone: true,
   imports: [
-    MatFormField,
     MatInputModule,
     MatIconModule,
     ChannelButtonComponent,
