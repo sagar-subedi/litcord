@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Message } from '../../types/Message';
 import { MessageService } from '../../services/message.service';
 import { AuthService } from '../../services/auth.service';
+import { SignalingService } from '../../services/signaling-service.service';
 
 @Component({
   selector: 'app-chat',
@@ -27,14 +28,22 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private messageService: MessageService,
-    private authService: AuthService
+    private authService: AuthService,
+    private signalingService: SignalingService
   ) {}
 
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUserId() ?? '';
     this.currentUserEmail = this.authService.getCurrentUserEmail() ?? '';
-    // this.loadInitialMessages();
     this.loadMessages();
+    setTimeout(
+      ()=>{
+        this.signalingService.subscribe(`messages/${this.channel.id}`, (message: any) => {
+          console.log('Received live message', message)
+          this.messages.push(JSON.parse(message));
+        });
+      }
+    ,2000)
   }
 
   loadMessages(): void {
@@ -77,14 +86,9 @@ export class ChatComponent implements OnInit {
         senderEmail: this.currentUserEmail,
         channelId: this.channel.id,
       };
-      this.messages.push(message);
+      this.signalingService.publish(`chat/${this.channel.id}`, JSON.stringify(message));
       this.messageInput = '';
       setTimeout(() => this.scrollToBottom(), 0);
-
-      this.messageService.addMessage(message).subscribe((response: any) => {
-        console.log('Message sent:', response);
-        this.messageInput = ''; // Clear input
-      });
     }
   }
 
