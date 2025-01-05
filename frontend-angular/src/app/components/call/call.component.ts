@@ -16,11 +16,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ChatComponent } from "../chat/chat.component";
 
 @Component({
   selector: 'app-video-call',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule],
+  imports: [FormsModule, CommonModule, ChatComponent, MatIconModule, ChatComponent],
   templateUrl: './call.component.html',
   styleUrls: ['./call.component.scss'],
 })
@@ -61,7 +62,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
     this.localVideo.nativeElement.muted = true;
-    
+
     //ensure conection is setup before any subscription, doing so by delaying subscription
     setTimeout(() => {
       this.signalingService.subscribe('offer', (offer: any) =>
@@ -351,11 +352,11 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     'Hello, welcome to the call!',
     'Let me know if you need anything.',
   ];
-  
+
   // Add new messages here
   addMessage(newMessage: string) {
     this.chatMessages.push(newMessage);
   }
-  
+
 
 }

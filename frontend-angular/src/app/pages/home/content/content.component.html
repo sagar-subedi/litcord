@@ -22,11 +22,11 @@
   <!-- Display call component or chat component based on type of channel -->
   <div
     *ngIf="channel.type === 'VIDEO'"
-    class="h-full flex flex-col justify-center flex-grow"
+    class="h-full"
   >
-    <app-video-call [channel]="channel"></app-video-call>
+    <app-video-call class="h-full" [channel]="channel"></app-video-call>
   </div>
-  <div class="h-full flex flex-col justify-end">
-    <app-chat [channel]="channel" class="h-full" *ngIf="channel.type === 'TEXT'"></app-chat>
+  <div class="h-full flex flex-col justify-end" *ngIf="channel.type === 'TEXT'">
+    <app-chat [channel]="channel" class="h-full"></app-chat>
   </div>
 </div>
