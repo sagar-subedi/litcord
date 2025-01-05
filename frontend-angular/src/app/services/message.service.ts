@@ -7,7 +7,8 @@ import { Message } from '../types/Message';
   providedIn: 'root',
 })
 export class MessageService {
-  private apiUrl = 'https://localhost:8081/messages';
+  // private apiUrl = 'https://localhost:8081/messages';
+  private apiUrl = 'https://litcord-api.sagar88.com.np/messages';
 
   constructor(private http: HttpClient) {}
 

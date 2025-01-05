@@ -7,7 +7,8 @@ import { AuthUtils } from '../utils/auth-utils';
 export class AuthService {
   private tokenKey = 'authToken';
 
-  private readonly apiUrl = 'https://localhost:8081'; // Replace with your backend URL
+  // private readonly apiUrl = 'https://localhost:8081'; // Replace with your backend URL
+  private readonly apiUrl = 'https://litcord-api.sagar88.com.np';
 
   constructor(private http: HttpClient) {}
 
