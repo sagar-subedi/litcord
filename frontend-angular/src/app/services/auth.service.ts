@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthUtils } from '../utils/auth-utils';
 
 @Injectable({ providedIn: 'root' })
