@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Message } from '../../types/Message';
 import { MessageService } from '../../services/message.service';
@@ -13,11 +21,11 @@ import { SignalingService } from '../../services/signaling-service.service';
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss',
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnChanges {
   @Input() channel: any;
   messages: Message[] = [];
   messageInput: string = '';
-  currentUser: string = 'user1'; // Replace with the actual logged-in user identifier
+  currentUser: string = '';
   currentUserEmail: string = 'user@gmail.com';
   isLoading: boolean = false;
 
@@ -33,17 +41,33 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('chat compoenent initialized');
     this.currentUser = this.authService.getCurrentUserId() ?? '';
     this.currentUserEmail = this.authService.getCurrentUserEmail() ?? '';
     this.loadMessages();
-    setTimeout(
-      ()=>{
-        this.signalingService.subscribe(`messages/${this.channel.id}`, (message: any) => {
-          console.log('Received live message', message)
+    setTimeout(() => {
+      this.signalingService.subscribe(
+        `messages/${this.channel.id}`,
+        (message: any) => {
+          console.log('Received live message', message);
           this.messages.push(JSON.parse(message));
-        });
+        }
+      );
+    }, 2000);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.messages = [];
+    this.signalingService.clearAllSubscriptions();
+    this.currentPage = 0;
+    this.loadMessages();
+    this.signalingService.subscribe(
+      `messages/${this.channel.id}`,
+      (message: any) => {
+        console.log('Received live message', message);
+        this.messages.push(JSON.parse(message));
       }
-    ,2000)
+    );
   }
 
   loadMessages(): void {
@@ -86,7 +110,10 @@ export class ChatComponent implements OnInit {
         senderEmail: this.currentUserEmail,
         channelId: this.channel.id,
       };
-      this.signalingService.publish(`chat/${this.channel.id}`, JSON.stringify(message));
+      this.signalingService.publish(
+        `chat/${this.channel.id}`,
+        JSON.stringify(message)
+      );
       this.messageInput = '';
       setTimeout(() => this.scrollToBottom(), 0);
     }
