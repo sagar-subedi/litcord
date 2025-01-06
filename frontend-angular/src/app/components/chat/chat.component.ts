@@ -51,6 +51,12 @@ export class ChatComponent implements OnInit, OnChanges {
         (message: any) => {
           console.log('Received live message', message);
           this.messages.push(JSON.parse(message));
+
+          //todo: temporary fix to scroll to bottom on new message, find better solution
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 1);
+          
         }
       );
     }, 2000);
