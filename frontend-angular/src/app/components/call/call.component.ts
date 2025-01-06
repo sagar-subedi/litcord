@@ -10,17 +10,21 @@ import {
   ViewChildren,
   QueryList,
   ChangeDetectorRef,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { SignalingService } from '../../services/signaling-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { ChatComponent } from "../chat/chat.component";
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-video-call',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatIconModule],
+  imports: [FormsModule, CommonModule, ChatComponent, MatIconModule, ChatComponent],
   templateUrl: './call.component.html',
   styleUrls: ['./call.component.scss'],
 })
@@ -32,7 +36,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
 
   private localStream!: MediaStream;
   messages: string[] = [];
-  userId: string = crypto.randomUUID();
+  userId!: string;
   channelId!: string;
   @Input() channel: any;
   userIds: string[] = []; // List of peer userIds to render
@@ -42,17 +46,21 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   isCameraOn: boolean = true;
   isChatOpen: boolean = false;
 
+  @Output() callEnd = new EventEmitter<void>();
+
 
   private peerConnectionMap: { [userId: string]: RTCPeerConnection } = {};
 
   constructor(
     private signalingService: SignalingService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService: AuthService
   ) {}
 
   async ngOnInit() {
     this.channelId = this.route.snapshot.paramMap.get('channelid') ?? '';
+    this.userId = this.authService.getCurrentUserEmail() ?? 'unknown';
 
     //get video/audio stream and sets the stream to be redered in 'localVideo' element
     this.localStream = await navigator.mediaDevices.getUserMedia({
@@ -61,7 +69,7 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.localVideo.nativeElement.srcObject = this.localStream;
     this.localVideo.nativeElement.muted = true;
-    
+
     //ensure conection is setup before any subscription, doing so by delaying subscription
     setTimeout(() => {
       this.signalingService.subscribe('offer', (offer: any) =>
@@ -323,21 +331,29 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
   // End Call
   endCall() {
     console.log('Ending call...');
+    this.localStream?.getTracks().forEach((track) => track.stop());
+    this.callEnd.emit();
     // Add your logic to terminate the WebRTC call
   }
 
   // Toggle Mute
   toggleMute() {
-    this.isMuted = !this.isMuted;
-    console.log(this.isMuted ? 'Muted' : 'Unmuted');
-    // Add WebRTC mute/unmute logic
+    if (this.localStream) {
+      this.isMuted = !this.isMuted;
+      this.localStream.getAudioTracks().forEach(track => {
+        track.enabled = !this.isMuted;
+      });
+    }
   }
 
   // Toggle Camera
   toggleCamera() {
-    this.isCameraOn = !this.isCameraOn;
-    console.log(this.isCameraOn ? 'Camera On' : 'Camera Off');
-    // Add WebRTC toggle camera logic
+    if (this.localStream) {
+      this.isCameraOn = !this.isCameraOn;
+      this.localStream.getVideoTracks().forEach(track => {
+        track.enabled = this.isCameraOn;
+      });
+    }
   }
 
   // Open/Close Chat
@@ -351,11 +367,11 @@ export class CallComponent implements OnInit, OnChanges, OnDestroy {
     'Hello, welcome to the call!',
     'Let me know if you need anything.',
   ];
-  
+
   // Add new messages here
   addMessage(newMessage: string) {
     this.chatMessages.push(newMessage);
   }
-  
+
 
 }

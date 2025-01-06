@@ -97,11 +97,13 @@ public class ServerService {
         newServer.setInviteCode(inviteCode);
         newServer.setUserId(userId);
         Server createdServer = serverRepository.save(newServer);
-        Channel defaultChannel = channelRepository.save(new Channel("General",createdServer.getUserId(),createdServer,ChannelType.TEXT));
+        Channel defaultTextChannel = channelRepository.save(new Channel("General Text", createdServer.getUserId(),createdServer,ChannelType.TEXT));
+        Channel defaultVideoChannel = channelRepository.save(new Channel("General Video", createdServer.getUserId(),createdServer,ChannelType.VIDEO));
 
         //Return Membership object not used for now
         membershipRepository.save(new Membership(createdServer.getId(), createdServer.getUserId(), MembershipType.ADMIN));
-        createdServer.getChannels().add(defaultChannel);
+        createdServer.getChannels().add(defaultTextChannel);
+        createdServer.getChannels().add(defaultVideoChannel);
         createdServer.setDpUrl(getServerImageUrl(createdServer.getUserId(), createdServer.getId(), StringUtils.extractFileName(createdServer.getDpUrl())));
         return createdServer;
     }

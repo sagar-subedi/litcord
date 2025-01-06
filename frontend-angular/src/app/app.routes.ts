@@ -6,6 +6,7 @@ import { LoginComponent } from './pages/auth/login/login.component';
 import { RegisterComponent } from './pages/auth/register/register.component';
 import { HomeGuard } from './guards/home.guard';
 import { NotFound404Component } from './pages/not-found-404/not-found-404.component';
+import { NewServerComponent } from './pages/new-server/new-server.component';
 
 export const routes: Routes = [
   {
@@ -18,6 +19,12 @@ export const routes: Routes = [
     path: 'servers',
     component: HomeComponent,
     canActivate: [HomeGuard],
+    pathMatch: 'full',
+  },
+  {
+    path: 'servers/new',
+    component: NewServerComponent,
+    canActivate: [AuthGuard],
     pathMatch: 'full',
   },
   {

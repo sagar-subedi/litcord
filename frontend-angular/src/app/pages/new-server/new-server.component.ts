@@ -1,31 +1,24 @@
-import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ServerService } from '../../services/server.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ServerService } from '../../../services/server.service';
-import { AuthService } from '../../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  selector: 'app-new-server',
   standalone: true,
-  selector: 'app-create-server-modal',
-  templateUrl: './create-server-modal.component.html',
-  styleUrls: ['./create-server-modal.component.scss'],
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, CommonModule],
+  templateUrl: './new-server.component.html',
+  styleUrl: './new-server.component.scss'
 })
-export class CreateServerModalComponent {
-  @Input() isVisible = false; // Controls visibility of the modal
-  @Output() close = new EventEmitter<void>();
-  @Output() serverCreatedOrJoined = new EventEmitter<any>();
-
+export class NewServerComponent {
   serverName: string = '';
-
   inviteCode: string = '';
   serverImage?: File;
   imagePreview: string | null = null; // For holding the preview image URL
 
-  constructor(private serverService: ServerService, private authService: AuthService) {}
-  closeModal() {
-    this.close.emit();
-  }
+  constructor(private serverService: ServerService, private authService: AuthService, private routerService: Router) {}
 
   handleImageUpload(event: Event) {
     const target = event.target as HTMLInputElement;
@@ -42,14 +35,14 @@ export class CreateServerModalComponent {
   }
 
   createServer() {
+    let userId = parseInt(this.authService.getCurrentUserId()!);
+
     if (this.serverName && this.serverImage) {
-      let userId = parseInt(this.authService.getCurrentUserId()!)
       this.serverService
         .createServer(this.serverName, userId, this.serverImage)
         .subscribe({
           next: (data) => {
-            this.serverCreatedOrJoined.emit(data);
-            this.closeModal();
+            this.routerService.navigate(['/servers'])
           },
         });
     }
@@ -64,8 +57,7 @@ export class CreateServerModalComponent {
     this.serverService.joinServer(this.inviteCode, userId).subscribe({
       next: (server) => {
         console.log('Joined server:', server );
-        this.serverCreatedOrJoined.emit(server)
-        this.closeModal();
+        this.routerService.navigate(['/servers'])
       },
       error: (err) => console.error('Error joining server:', err),
     });

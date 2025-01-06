@@ -1,0 +1,102 @@
+<div
+  class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+>
+  <div
+    class="bg-white rounded-lg shadow-lg w-96 p-6 relative"
+  >
+    <form (ngSubmit)="createServer()" class="space-y-4">
+      <h3 class="text-black text-xl font-semibold mb-2">Create a New Server</h3>
+
+      <!-- Server Image Field -->
+      <div>
+        <label
+          for="serverImage"
+          class="block text-gray-700 font-medium mb-2"
+        >Server Image</label>
+        <input
+          type="file"
+          id="serverImage"
+          (change)="handleImageUpload($event)"
+          class="border border-gray-300 rounded-lg w-full px-4 py-2"
+        />
+        <!-- Image Preview -->
+        <div
+          *ngIf="imagePreview"
+          class="mt-4 flex justify-center"
+        >
+          <img
+            [src]="imagePreview"
+            alt="Image Preview"
+            class="w-20 h-20 object-cover rounded-full"
+          />
+        </div>
+      </div>
+
+      <!-- Server Name Field -->
+      <div>
+        <label
+          for="serverName"
+          class="block text-gray-700 font-medium mb-2"
+        >Server Name</label>
+        <input
+          type="text"
+          id="serverName"
+          [(ngModel)]="serverName"
+          name="serverName"
+          required
+          placeholder="Enter server name"
+          class="text-black border border-gray-300 rounded-lg w-full px-4 py-2"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="bg-blue-500 text-white rounded-lg px-6 py-2 w-full hover:bg-blue-600"
+      >
+        Create Server
+      </button>
+    </form>
+
+    <!-- OR Separator -->
+    <div class="relative my-6">
+      <div class="border-t border-gray-300"></div>
+      <div
+        class="absolute top-[-12px] left-1/2 transform -translate-x-1/2 bg-white px-3 text-gray-600 font-medium"
+      >
+        OR
+      </div>
+    </div>
+
+    <!-- Join Existing Server Section -->
+    <form (ngSubmit)="joinServer()" class="space-y-4">
+      <h3 class="text-black text-xl font-semibold mb-2">Join an Existing Server</h3>
+
+      <!-- Invite Code Field -->
+      <div>
+        <label
+          for="inviteCode"
+          class="block text-gray-700 font-medium mb-2"
+        >Invite Code</label>
+        <input
+          type="text"
+          id="inviteCode"
+          [(ngModel)]="inviteCode"
+          name="inviteCode"
+          required
+          placeholder="Enter invite code"
+          class="text-black border border-gray-300 rounded-lg w-full px-4 py-2"
+        />
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="bg-green-500 text-white rounded-lg px-6 py-2 w-full hover:bg-green-600"
+      >
+        Join Server
+      </button>
+    </form>
+  </div>
+</div>
+
